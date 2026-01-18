@@ -3,3 +3,5 @@
 *.o
 en.subject.pdf
 42-philosophers-tester/
+text.txt
+./philo
