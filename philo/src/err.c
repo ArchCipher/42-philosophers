@@ -12,18 +12,6 @@
 
 #include "philo.h"
 
-const char	*get_simaction_str(t_action act)
-{
-	static const char	*action[5];
-
-	action[TAKE_FORK] = "has taken a fork";
-	action[EAT] = "is eating";
-	action[SLEEP] = "is sleeping";
-	action[THINK] = "is thinking";
-	action[DEATH] = "died";
-	return (action[act]);
-}
-
 const char *ft_strerror(int errnum)
 {
 	if (errnum == EPERM)// 1

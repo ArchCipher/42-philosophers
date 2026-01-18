@@ -26,19 +26,19 @@ int	sim_eat(t_philo *philo)
 {
 	int	ret;
 
-	if (pthread_mutex_lock(philo->first_fork))
+	if (pthread_mutex_lock(philo->left_fork))
 		return (1);
 	sim_print(philo, TAKE_FORK);
-	if (pthread_mutex_lock(philo->second_fork))
-		return (pthread_mutex_unlock(philo->first_fork), 1);
+	if (pthread_mutex_lock(philo->right_fork))
+		return (pthread_mutex_unlock(philo->left_fork), 1);
 	sim_print(philo, TAKE_FORK);
 	sim_print(philo, EAT);
 	update_meal_state(philo);
 	usleep(philo->input->time_to_eat * 1000);
 	ret = 0;
-	if (pthread_mutex_unlock(philo->first_fork))
+	if (pthread_mutex_unlock(philo->left_fork))
 		ret = 1;
-	if (pthread_mutex_unlock(philo->second_fork))
+	if (pthread_mutex_unlock(philo->right_fork))
 		ret = 1;
 	return (ret);
 }
@@ -64,11 +64,11 @@ void	*run_sim(void *arg)
 	philo = (t_philo *)arg;
 	if (philo->input->philos == 1)
 	{
-		if (pthread_mutex_lock(philo->first_fork))
+		if (pthread_mutex_lock(philo->left_fork))
 			return (NULL);
 		sim_print(philo, TAKE_FORK);
 		usleep(philo->input->time_to_die * 1000);
-		pthread_mutex_unlock(philo->second_fork);
+		pthread_mutex_unlock(philo->right_fork);
 		return (NULL);
 	}
 	while (!should_stop_sim(philo->input))

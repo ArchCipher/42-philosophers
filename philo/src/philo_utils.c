@@ -23,13 +23,12 @@ long long get_time(void)
 	return ((tp.tv_sec * 1000) + (tp.tv_usec * 0.001));
 }
 
-void	sim_print(t_philo *philo, int action)
+void	sim_print(t_philo *philo, const char *action)
 {
 	if (pthread_mutex_lock(&philo->input->global_state))
 		return ;
 	if (!philo->input->sim_stop)
-		printf("%lld %d %s\n", get_time() - philo->input->sim_start, philo->id,
-			get_simaction_str(action));
+		printf("%lld %d %s\n", get_time() - philo->input->sim_start, philo->id, action);
 	if (pthread_mutex_unlock(&philo->input->global_state))
 		return ;
 }

@@ -33,13 +33,6 @@ int	init_mutexes(t_input *input, t_philo *philos)
 	return (0);
 }
 
-pthread_mutex_t	*get_fork_mutex(t_input *input, int i, int fork_num)
-{
-	if ((i % 2 == 0 && fork_num == 1) || (i % 2 != 0 && fork_num == 2))
-		return (input->forks + i);
-	return (input->forks + ((i + 1) % input->philos));
-}
-
 int	init_threads(t_input *input, t_philo *philos)
 {
 	int	i;
@@ -51,8 +44,8 @@ int	init_threads(t_input *input, t_philo *philos)
 	while (i < input->philos)
 	{
 		philos[i].id = i + 1;
-		philos[i].first_fork = get_fork_mutex(input, i, 1);
-		philos[i].second_fork = get_fork_mutex(input, i, 2);
+		philos[i].left_fork = input->forks + i;
+		philos[i].right_fork = input->forks + ((i + 1) % input->philos);
 		philos[i].last_meal_time = get_time();
 		philos[i].meals_eaten = 0;
 		philos[i].input = input;

@@ -55,7 +55,7 @@ int	create_manage_threads(t_input *input, t_philo *philos)
 	if (pthread_create(&input->thread_ids[input->philos], NULL, monitor_sim,
 			philos))
 		return (printf("pthread_create: %s\n", ft_strerror(errno)), 1);
-	i = 0;
+	i = 1;
 	while (i < input->philos)
 	{
 		if (pthread_create(&input->thread_ids[i], NULL, run_sim, philos + i))
@@ -64,7 +64,19 @@ int	create_manage_threads(t_input *input, t_philo *philos)
 			join_threads(i, input->philos, input->thread_ids);
 			return (printf("pthread_create: %s\n", ft_strerror(errno)), 1);
 		}
-		i++;
+		i+=2;
+	}
+	i = 0;
+	usleep (10 * 1000);
+	while (i < input->philos)
+	{
+		if (pthread_create(&input->thread_ids[i], NULL, run_sim, philos + i))
+		{
+			stop_simulation(philos + i);
+			join_threads(i, input->philos, input->thread_ids);
+			return (printf("pthread_create: %s\n", ft_strerror(errno)), 1);
+		}
+		i+=2;
 	}
 	join_threads(input->philos, input->philos, input->thread_ids);
 	return (0);

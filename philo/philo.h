@@ -11,11 +11,11 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-// # define TAKE_FORK "has taken a fork"
-// # define EAT "is eating"
-// # define SLEEP "is sleeping"
-// # define THINK "is thinking"
-// # define DEATH "died"
+# define TAKE_FORK "has taken a fork"
+# define EAT "is eating"
+# define SLEEP "is sleeping"
+# define THINK "is thinking"
+# define DEATH "died"
 
 # define E_ARGS1 "number_of_philosophers time_to_die time_to_eat time_to_sleep"
 # define E_ARGS2 "[number_of_times_each_philosopher_must_eat]"
@@ -29,15 +29,6 @@
 # define E_NOTRECOVERABLE "State not recoverable"
 # define E_OWNERDEAD "Owner died"
 # define E_BUSY "Device or resource busy"
-
-typedef enum e_action
-{
-	TAKE_FORK,
-	EAT,
-	SLEEP,
-	THINK,
-	DEATH
-}					t_action;
 
 typedef struct s_input
 {
@@ -56,8 +47,8 @@ typedef struct s_input
 typedef struct s_philo
 {
 	int				id;
-	pthread_mutex_t	*first_fork;
-	pthread_mutex_t	*second_fork;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
 	long long		last_meal_time;
 	int				meals_eaten;
 	pthread_mutex_t	state;
@@ -79,10 +70,8 @@ void	*monitor_sim(void *arg);
 long long			get_time(void);
 long long			read_data(pthread_mutex_t *state, void *data);
 int	should_stop_sim(t_input *input);
-void				sim_print(t_philo *philo, int action);
-
+void	sim_print(t_philo *philo, const char *action);
 
 const char			*ft_strerror(int errnum);
-const char			*get_simaction_str(t_action act);
 
 #endif
