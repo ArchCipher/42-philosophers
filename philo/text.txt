@@ -1,0 +1,511 @@
+./philo 5 600 200 200
+14 3 has taken a fork
+14 3 has taken a fork
+14 3 is eating
+14 4 has taken a fork
+14 1 has taken a fork
+15 1 has taken a fork
+15 1 is eating
+215 1 is sleeping
+218 3 is sleeping
+218 2 has taken a fork
+218 2 has taken a fork
+218 2 is eating
+218 4 has taken a fork
+218 4 is eating
+418 4 is sleeping
+418 1 is thinking
+418 5 has taken a fork
+418 5 has taken a fork
+418 5 is eating
+418 3 is thinking
+419 3 has taken a fork
+419 3 has taken a fork
+419 3 is eating
+421 2 is sleeping
+618 4 is thinking
+619 3 is sleeping
+619 4 has taken a fork
+619 4 has taken a fork
+619 4 is eating
+619 5 is sleeping
+621 2 is thinking
+622 1 has taken a fork
+622 1 has taken a fork
+622 1 is eating
+622 2 has taken a fork
+819 3 is thinking
+819 5 is thinking
+819 4 is sleeping
+820 5 has taken a fork
+822 5 has taken a fork
+822 5 is eating
+823 1 is sleeping
+823 2 has taken a fork
+823 2 is eating
+1019 4 is thinking
+1022 5 is sleeping
+1022 4 has taken a fork
+1022 4 has taken a fork
+1022 4 is eating
+1023 2 is sleeping
+1023 3 has taken a fork
+1023 1 is thinking
+1024 1 has taken a fork
+1024 1 has taken a fork
+1024 1 is eating
+1211 3 died
+
+
+---- shouldn't die. philo 3 cant eat as other got greedy. need to work this out
+
+
+Testing uneven numbers (overkill) - they shouldn't die
+
+        5 610 200 100 10
+1       Fail    [x]     3661 5 died
+2       Fail    [x]     1222 4 died
+3       Fail    [x]     3053 2 died
+4       Fail    [x]     4271 4 died
+5       Fail    [x]     1221 5 died
+6       Fail    [x]     1221 4 died
+7       Fail    [x]     1222 3 died
+8       Pass    [✓]     4806 5 is eating
+9       Fail    [x]     1830 4 died
+10      Fail    [x]     3662 2 died
+
+        5 601 200 200 10
+1       Pass    [✓]     4807 5 is eating
+2       Pass    [✓]     4807 2 is eating
+3       Pass    [✓]     4810 2 has taken a fork
+4       Pass    [✓]     4808 2 is eating
+5       Pass    [✓]     4805 5 is eating
+6       Pass    [✓]     4806 3 is eating
+7       Pass    [✓]     4806 3 is eating
+8       Fail    [x]     601 1 died
+9       Pass    [✓]     4807 1 has taken a fork
+10      Pass    [✓]     4807 1 has taken a fork
+
+        31 610 200 100 10
+1       Pass    [✓]     4208 5 is eating
+2       Pass    [✓]     4808 28 is eating
+3       Fail    [x]     1220 12 died
+4       Fail    [x]     1222 30 died
+5       Fail    [x]     2442 30 died
+6       Pass    [✓]     4209 31 is eating
+7       Pass    [✓]     4212 6 is eating
+8       Fail    [x]     1831 20 died
+9       Fail    [x]     611 4 died
+10      Fail    [x]     611 15 died
+
+        31 610 200 200 10
+1       Pass    [✓]     4216 31 is eating
+2       Pass    [✓]     4217 26 has taken a fork
+3       Pass    [✓]     4218 17 is eating
+4       Pass    [✓]     5416 18 has taken a fork
+5       Pass    [✓]     4816 13 is eating
+6       Pass    [✓]     4217 9 is eating
+7       Pass    [✓]     4215 31 is eating
+8       Fail    [x]     613 31 died
+9       Pass    [✓]     4216 31 is eating
+10      Pass    [✓]     4215 7 is eating
+
+        31 601 200 200 10
+1       Fail    [x]     602 20 died
+2       Pass    [✓]     5410 20 has taken a fork
+3       Pass    [✓]     4208 22 is eating
+4       Pass    [✓]     4810 30 is eating
+5       Pass    [✓]     4809 15 is eating
+6       Pass    [✓]     4208 18 is eating
+7       Pass    [✓]     4208 16 is eating
+8       Pass    [✓]     4809 19 is sleeping
+9       Pass    [✓]     4209 22 is eating
+10      Pass    [✓]     4209 18 is eating
+
+        131 610 200 100 10
+1       Pass    [✓]     4833 128 is eating
+2       Fail    [x]     3051 130 died
+3       Pass    [✓]     4819 9 is eating
+4       Fail    [x]     1831 131 died
+5       Fail    [x]     1831 43 died
+6       Pass    [✓]     4217 125 is eating
+7       Pass    [✓]     4815 100 is eating
+8       Pass    [✓]     4812 124 is eating
+9       Fail    [x]     1832 100 died
+10      Fail    [x]     3051 82 died
+
+        131 605 200 200 10
+1       Pass    [✓]     5425 4 has taken a fork
+2       Pass    [✓]     4823 5 is eating
+3       Pass    [✓]     5436 129 is eating
+4       Pass    [✓]     4825 110 is eating
+5       Pass    [✓]     4828 98 is eating
+6       Pass    [✓]     4217 101 is eating
+7       Pass    [✓]     4217 103 is eating
+8       Fail    [x]     606 94 died
+9       Pass    [✓]     5422 77 is eating
+10      Pass    [✓]     4221 109 is eating
+
+        131 601 200 200 10
+1       Pass    [✓]     4812 85 is eating
+2       Pass    [✓]     4811 24 has taken a fork
+3       Pass    [✓]     4809 23 is eating
+4       Pass    [✓]     4809 117 is eating
+5       Pass    [✓]     4809 27 is sleeping
+6       Fail    [x]     602 15 died
+7       Pass    [✓]     4809 23 is eating
+8       Pass    [✓]     4809 27 is eating
+9       Fail    [x]     1203 14 died
+10      Pass    [✓]     4809 60 is thinking
+
+        199 610 200 100 10
+1       Fail    [x]     1832 17 died
+2       Fail    [x]     611 127 died
+3       Fail    [x]     3052 199 died
+4       Fail    [x]     1832 21 died
+5       Fail    [x]     1220 96 died
+6       Fail    [x]     1221 7 died
+7       Fail    [x]     3051 113 died
+8       Pass    [✓]     4821 193 is eating
+9       Pass    [✓]     4819 190 has taken a fork
+10      Pass    [✓]     4217 185 is eating
+
+        199 601 200 200 10
+1       Fail    [x]     601 102 died
+2       Fail    [x]     601 1 died
+3       Pass    [✓]     4810 72 is eating
+4       Fail    [x]     601 74 died
+5       Pass    [✓]     4809 35 is sleeping
+6       Pass    [✓]     4810 16 is eating
+7       Fail    [x]     602 150 died
+8       Pass    [✓]     4810 185 is eating
+9       Pass    [✓]     4810 114 is eating
+10      Pass    [✓]     4805 25 is eating
+
+        198 610 200 200 10
+1       Fail    [x]     612 166 died
+2       Pass    [✓]     4823 138 is eating
+3       Pass    [✓]     4225 189 is eating
+4       Pass    [✓]     4824 157 is eating
+5       Fail    [x]     611 192 died
+6       Pass    [✓]     4823 134 is eating
+7       Pass    [✓]     5426 137 is eating
+8       Pass    [✓]     4824 172 is eating
+9       Pass    [✓]     4824 138 is eating
+10      Pass    [✓]     5430 152 has taken a fork
+
+Testing even numbers (overkill) - they shouldn't die
+        50 410 200 100 10
+1       Fail    [x]     411 6 died
+2       Fail    [x]     411 4 died
+3       Fail    [x]     411 4 died
+4       Fail    [x]     821 10 died
+5       Fail    [x]     821 16 died
+6       Fail    [x]     821 8 died
+7       Fail    [x]     411 8 died
+8       Fail    [x]     822 17 died
+9       Fail    [x]     822 17 died
+10      Fail    [x]     412 1 died
+        0 % correct
+____________________________________________
+        50 410 200 200 10
+1       Fail    [x]     412 6 died
+2       Fail    [x]     411 6 died
+3       Fail    [x]     822 8 died
+4       Fail    [x]     412 26 died
+5       Fail    [x]     821 33 died
+6       Fail    [x]     821 10 died
+7       Pass    [✓]     4023 48 is eating
+8       Fail    [x]     412 49 died
+9       Fail    [x]     411 4 died
+10      Fail    [x]     822 10 died
+        10 % correct
+____________________________________________
+        50 405 200 200 10
+1       Pass    [✓]     4016 48 is eating
+2       Fail    [x]     810 16 died
+3       Fail    [x]     810 47 died
+4       Fail    [x]     406 6 died
+5       Fail    [x]     406 49 died
+6       Fail    [x]     407 27 died
+7       Fail    [x]     811 16 died
+8       Fail    [x]     408 24 died
+9       Fail    [x]     406 6 died
+10      Fail    [x]     406 44 died
+        10 % correct
+____________________________________________
+        50 401 200 200 10
+1       Fail    [x]     402 1 died
+2       Fail    [x]     402 2 died
+3       Fail    [x]     403 1 died
+4       Fail    [x]     402 4 died
+5       Fail    [x]     402 2 died
+6       Fail    [x]     402 2 died
+7       Fail    [x]     402 4 died
+8       Fail    [x]     401 1 died
+9       Fail    [x]     402 2 died
+10      Fail    [x]     402 3 died
+        0 % correct
+____________________________________________
+        130 410 200 100 10
+1       Fail    [x]     411 10 died
+2       Fail    [x]     411 8 died
+3       Fail    [x]     412 3 died
+4       Fail    [x]     412 8 died
+5       Fail    [x]     821 53 died
+6       Fail    [x]     411 5 died
+7       Pass    [✓]     412 93 has taken a fork
+8       Fail    [x]     411 8 died
+9       Fail    [x]     412 2 died
+10      Fail    [x]     411 6 died
+        10 % correct
+____________________________________________
+        130 410 200 200 10
+1       Pass    [✓]     411 110 is sleeping
+2       Fail    [x]     412 2 died
+3       Fail    [x]     412 5 died
+4       Fail    [x]     412 106 died
+5       Fail    [x]     821 10 died
+6       Fail    [x]     411 124 died
+7       Fail    [x]     411 4 died
+8       Fail    [x]     411 5 died
+9       Fail    [x]     820 10 died
+10      Fail    [x]     411 1 died
+        10 % correct
+____________________________________________
+        130 405 200 200 10
+1       Fail    [x]     406 90 died
+2       Fail    [x]     406 47 died
+3       Fail    [x]     406 45 died
+4       Fail    [x]     406 4 died
+5       Fail    [x]     406 96 died
+6       Fail    [x]     405 45 died
+7       Fail    [x]     406 47 died
+8       Fail    [x]     406 4 died
+9       Fail    [x]     406 92 died
+10      Fail    [x]     406 1 died
+        0 % correct
+____________________________________________
+        130 401 200 200 10
+1       Fail    [x]     402 1 died
+2       Fail    [x]     402 2 died
+3       Fail    [x]     402 1 died
+4       Fail    [x]     401 2 died
+5       Fail    [x]     402 1 died
+6       Fail    [x]     402 1 died
+7       Fail    [x]     402 2 died
+8       Fail    [x]     402 1 died
+9       Fail    [x]     402 1 died
+10      Fail    [x]     402 70 died
+        0 % correct
+____________________________________________
+        198 410 200 100 10
+1       Fail    [x]     411 2 died
+2       Fail    [x]     411 1 died
+3       Fail    [x]     410 4 died
+4       Fail    [x]     820 10 died
+5       Fail    [x]     411 5 died
+6       Fail    [x]     411 1 died
+7       Fail    [x]     411 147 died
+8       Fail    [x]     411 148 died
+9       Fail    [x]     410 143 died
+10      Fail    [x]     411 68 died
+        0 % correct
+____________________________________________
+        198 410 200 200 10
+1       Fail    [x]     411 10 died
+2       Fail    [x]     411 4 died
+3       Fail    [x]     411 6 died
+4       Fail    [x]     820 10 died
+5       Fail    [x]     411 6 died
+6       Fail    [x]     411 97 died
+7       Fail    [x]     411 4 died
+8       Fail    [x]     821 6 died
+9       Fail    [x]     411 3 died
+10      Fail    [x]     411 8 died
+        0 % correct
+____________________________________________
+        198 405 200 200 10
+1       Fail    [x]     406 18 died
+2       Fail    [x]     406 50 died
+3       Fail    [x]     406 77 died
+4       Fail    [x]     405 5 died
+5       Fail    [x]     406 5 died
+6       Fail    [x]     405 148 died
+7       Fail    [x]     406 80 died
+8       Fail    [x]     406 7 died
+9       Fail    [x]     406 1 died
+10      Fail    [x]     405 112 died
+        0 % correct
+____________________________________________
+        198 401 200 200 10
+1       Fail    [x]     401 1 died
+2       Fail    [x]     402 2 died
+3       Fail    [x]     402 2 died
+4       Fail    [x]     403 4 died
+5       Fail    [x]     401 2 died
+6       Fail    [x]     401 2 died
+7       Fail    [x]     401 1 died
+8       Fail    [x]     402 2 died
+9       Fail    [x]     402 2 died
+10      Fail    [x]     402 2 died
+
+Testing uneven numbers - one should die
+        3 596 200 200 10
+1       Pass    [✓]     598 1 died
+2       Pass    [✓]     596 2 died
+3       Fail    [x]     5806 3 has taken a fork
+4       Pass    [✓]     597 1 died
+5       Fail    [x]     5807 3 is eating
+6       Pass    [✓]     597 1 died
+7       Pass    [✓]     597 2 died
+8       Pass    [✓]     597 3 died
+9       Fail    [x]     5808 3 is eating
+10      Pass    [✓]     597 2 died
+
+        31 596 200 200 10
+1       Pass    [✓]     597 4 died
+2       Pass    [✓]     597 12 died
+3       Fail    [x]     4616 8 has taken a fork
+4       Fail    [x]     4616 17 is eating
+5       Fail    [x]     4613 21 is eating
+6       Fail    [x]     4620 1 is eating
+7       Pass    [✓]     598 31 died
+8       Fail    [x]     5216 23 is eating
+9       Pass    [✓]     597 6 died
+10      Pass    [✓]     599 6 died
+
+        31 599 200 200 10
+1       Pass    [✓]     600 5 died
+2       Pass    [✓]     600 8 died
+3       Fail    [x]     4616 3 is eating
+4       Pass    [✓]     600 8 died
+5       Fail    [x]     4619 19 is eating
+6       Fail    [x]     4014 4 is eating
+7       Fail    [x]     4621 23 is eating
+8       Fail    [x]     4612 20 has taken a fork
+9       Pass    [✓]     601 4 died
+10      Pass    [✓]     600 4 died
+
+        31 600 200 200 10
+1       Pass    [✓]     602 1 died
+2       Pass    [✓]     1201 9 died
+3       Pass    [✓]     601 7 died
+4       Fail    [x]     4017 2 is eating
+5       Fail    [x]     4017 30 is eating
+6       Pass    [✓]     602 6 died
+7       Pass    [✓]     602 4 died
+8       Pass    [✓]     600 6 died
+9       Fail    [x]     4617 9 is eating
+10      Fail    [x]     4620 6 has taken a fork
+
+        131 596 200 200 10
+1       Pass    [✓]     598 6 died
+2       Fail    [x]     4628 2 is eating
+3       Pass    [✓]     598 4 died
+4       Pass    [✓]     597 8 died
+5       Pass    [✓]     597 1 died
+6       Fail    [x]     4628 93 is eating
+7       Pass    [✓]     598 10 died
+8       Fail    [x]     4633 129 is eating
+9       Pass    [✓]     597 3 died
+10      Fail    [x]     4620 109 is eating
+
+        131 599 200 200 10
+1       Pass    [✓]     600 6 died
+2       Pass    [✓]     601 8 died
+3       Fail    [x]     4628 131 is eating
+4       Pass    [✓]     600 6 died
+5       Pass    [✓]     600 4 died
+6       Fail    [x]     4629 125 is eating
+7       Pass    [✓]     600 8 died
+8       Fail    [x]     4631 127 is eating
+9       Fail    [x]     5220 84 is eating
+10      Pass    [✓]     600 1 died
+
+        131 600 200 200 10
+1       Fail    [x]     4620 76 is eating
+2       Fail    [x]     4627 109 has taken a fork
+3       Pass    [✓]     600 6 died
+4       Pass    [✓]     601 4 died
+5       Pass    [✓]     601 13 died
+6       Fail    [x]     4018 106 is eating
+7       Pass    [✓]     601 10 died
+8       Pass    [✓]     601 3 died
+9       Pass    [✓]     601 4 died
+10      Pass    [✓]     601 10 died
+
+        199 596 200 200 10
+1       Pass    [✓]     597 8 died
+2       Pass    [✓]     597 4 died
+3       Fail    [x]     4623 181 is eating
+4       Pass    [✓]     597 4 died
+5       Pass    [✓]     597 4 died
+6       Fail    [x]     4625 193 is eating
+7       Pass    [✓]     596 198 died
+8       Fail    [x]     4625 199 is eating
+9       Pass    [✓]     599 5 died
+10      Pass    [✓]     597 1 died
+
+        199 599 200 200 10
+1       Pass    [✓]     600 4 died
+2       Fail    [x]     4630 167 is eating
+3       Pass    [✓]     600 8 died
+4       Pass    [✓]     599 4 died
+5       Pass    [✓]     600 4 died
+6       Pass    [✓]     600 5 died
+7       Pass    [✓]     600 36 died
+8       Pass    [✓]     600 1 died
+9       Fail    [x]     4623 177 is eating
+10      Pass    [✓]     600 4 died
+
+        199 600 200 200 10
+1       Fail    [x]     4629 173 is eating
+2       Pass    [✓]     601 7 died
+3       Pass    [✓]     601 5 died
+4       Pass    [✓]     601 4 died
+5       Fail    [x]     4626 157 is eating
+6       Fail    [x]     4627 195 is eating
+7       Pass    [✓]     601 8 died
+8       Fail    [x]     4623 167 is eating
+9       Fail    [x]     4641 187 is eating
+10      Pass    [✓]     601 6 died
+
+Testing even numbers - one should die
+        3 599 200 200 10
+1       Pass    [✓]     600 1 died
+2       Pass    [✓]     599 2 died
+3       Pass    [✓]     600 2 died
+4       Fail    [x]     5808 3 is eating
+5       Pass    [✓]     600 2 died
+6       Pass    [✓]     600 3 died
+7       Pass    [✓]     599 1 died
+8       Pass    [✓]     599 2 died
+9       Fail    [x]     5808 3 has taken a fork
+10      Pass    [✓]     599 1 died
+
+        31 599 200 200 10
+1       Pass    [✓]     599 6 died
+2       Pass    [✓]     601 30 died
+3       Pass    [✓]     601 29 died
+4       Pass    [✓]     602 26 died
+5       Fail    [x]     4623 31 is eating
+6       Fail    [x]     4016 6 is eating
+7       Pass    [✓]     600 4 died
+8       Pass    [✓]     600 8 died
+9       Pass    [✓]     601 4 died
+10      Fail    [x]     5215 16 has taken a fork
+
+        131 596 200 200 10
+1       Pass    [✓]     596 5 died
+2       Fail    [x]     4625 93 is eating
+3       Pass    [✓]     596 7 died
+4       Pass    [✓]     597 100 died
+5       Pass    [✓]     597 8 died
+6       Pass    [✓]     597 1 died
+7       Pass    [✓]     597 4 died
+8       Pass    [✓]     597 6 died
+9       Fail    [x]     4619 129 is eating
+10      Pass    [✓]     598 4 died
+
+

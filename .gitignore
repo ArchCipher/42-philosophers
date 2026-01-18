@@ -1,6 +1,5 @@
 .DS_Store
 .vscode/
 *.o
-philo
 en.subject.pdf
 42-philosophers-tester/
