@@ -63,11 +63,3 @@ static void	join_threads(int philo_nbr, int end, pthread_t *thread_ids)
 	if (pthread_join(thread_ids[philo_nbr], NULL))
 		perr(JOIN, errno);
 }
-
-void	stop_simulation(t_input *input)
-{
-	if (pthread_mutex_lock(&input->global_state))
-		return ;
-	input->sim_stop = 1;
-	pthread_mutex_unlock(&input->global_state);
-}

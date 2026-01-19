@@ -7,8 +7,9 @@ INC				= -I.
 
 #				Sources & Objects
 MSRCS			= \
-				philo parser init threads routine monitor \
-				philo_utils err 
+				philo parser init \
+				threads routine monitor \
+				philo_utils err
 
 SRCS			= $(addprefix src/, $(addsuffix .c, $(MSRCS)))
 OBJS			= $(SRCS:.c=.o)

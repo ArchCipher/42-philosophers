@@ -109,3 +109,11 @@ static long long	read_long_long(pthread_mutex_t *mutex, long long *data)
 		return (-1);
 	return (ret);
 }
+
+void	stop_simulation(t_input *input)
+{
+	if (pthread_mutex_lock(&input->global_state))
+		return ;
+	input->sim_stop = 1;
+	pthread_mutex_unlock(&input->global_state);
+}

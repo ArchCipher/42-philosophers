@@ -12,6 +12,7 @@
 # include <sys/time.h>
 # include <unistd.h>
 
+// error messages
 # define E_ARGS1 "number_of_philosophers time_to_die time_to_eat time_to_sleep"
 # define E_ARGS2 "[number_of_times_each_philosopher_must_eat]"
 # define E_INVAL "Invalid argument"
@@ -25,15 +26,16 @@
 # define E_OWNERDEAD "Owner died"
 # define E_BUSY "Device or resource busy"
 
+// actions
 # define TAKE_FORK "has taken a fork"
 # define EAT "is eating"
 # define SLEEP "is sleeping"
 # define THINK "is thinking"
 # define DEATH "died"
 
+// thread and mutex function names
 # define CREATE "pthread_create"
 # define JOIN "pthread_join"
-
 # define INIT "pthread_mutex_init"
 # define DESTROY "pthread_mutex_destroy"
 # define LOCK "pthread_mutex_lock"
@@ -45,7 +47,7 @@ typedef enum e_mutex_op
 	MUTEX_DESTROY,
 	MUTEX_LOCK,
 	MUTEX_UNLOCK
-}			t_mutex_op;
+}					t_mutex_op;
 
 typedef struct s_input
 {
@@ -72,29 +74,25 @@ typedef struct s_philo
 	t_input			*input;
 }					t_philo;
 
-int	parse_input(char **av, t_input *input);
+int					parse_input(char **av, t_input *input);
 
-int	mutex_op(pthread_mutex_t *mutex, t_mutex_op op, const char *name);
-int init_philo(t_input *input, t_philo *philos);
-// t_philo *init_philo(t_input *input);
+int					init_philo(t_input *input, t_philo *philos);
+int					mutex_op(pthread_mutex_t *mutex, t_mutex_op op,
+						const char *name);
+void				destroy_mutexes(t_input *input, t_philo *philos, int end);
 
-int	create_manage_threads(t_input *input, t_philo *philos);
-// int create_manage_threads(t_input *input, t_philo *philos);
-void destroy_mutex(pthread_mutex_t *mutex);
-void	destroy_mutexes(t_input *input, t_philo *philos, int end);
-
-void	*run_sim(void *arg);
-void	*monitor_sim(void *arg);
-
-void	stop_simulation(t_input *input);
-
-void	precise_sleep(long long millisec);
+int					create_manage_threads(t_input *input, t_philo *philos);
+void				*run_sim(void *arg);
+void				*monitor_sim(void *arg);
+void				stop_simulation(t_input *input);
 
 long long			get_time(void);
-int	read_int(pthread_mutex_t *state, int *data);
-int	should_stop_sim(t_input *input);
-void	sim_print(t_philo *philo, const char *action, bool is_death);
+void				sim_print(t_philo *philo, const char *action,
+						bool is_death);
+int					read_int(pthread_mutex_t *state, int *data);
+int					should_stop_sim(t_input *input);
+void				precise_sleep(long long millisec);
 
-void	perr(const char *function, int errnum);
+void				perr(const char *function, int errnum);
 
 #endif

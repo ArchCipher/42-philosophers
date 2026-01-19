@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "philo.h"
 
 /*
@@ -39,7 +38,7 @@
 int	main(int ac, char **av)
 {
 	t_input	input;
-	t_philo *philos;
+	t_philo	*philos;
 
 	if (ac != 5 && ac != 6)
 		return (printf("USAGE: ./philo %s %s\n", E_ARGS1, E_ARGS2));
