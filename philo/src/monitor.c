@@ -12,7 +12,48 @@
 
 #include "philo.h"
 
-int	sim_done(t_philo *philos)
+static int			sim_done(t_philo *philos);
+static int			philo_dead(t_philo *philo);
+static long long	read_long_long(pthread_mutex_t *mutex, long long *data);
+
+/*
+DESCRIPTION:
+	Monitors the simulation and stops it if the philosophers have eaten enough
+	or if a philosopher has died.
+*/
+
+void	*monitor_sim(void *arg)
+{
+	t_philo	*philos;
+	int		i;
+
+	philos = (t_philo *)arg;
+	while (!should_stop_sim(philos->input))
+	{
+		if (philos->input->times_must_eat > 0 && sim_done(philos))
+			return (stop_simulation(philos->input), NULL);
+		i = 0;
+		while (i < philos->input->philos)
+		{
+			if (philos->input->times_must_eat > 0 && philo_dead(philos + i))
+			{
+				stop_simulation(philos->input);
+				sim_print(philos + i, DEATH, true);
+				return (NULL);
+			}
+			i++;
+		}
+		precise_sleep(5);
+	}
+	return (NULL);
+}
+
+/*
+DESCRIPTION:
+	Checks if all philosophers have eaten enough.
+*/
+
+static int	sim_done(t_philo *philos)
 {
 	int	i;
 	int	meals_eaten;
@@ -20,7 +61,7 @@ int	sim_done(t_philo *philos)
 	i = 0;
 	while (i < philos->input->philos)
 	{
-		meals_eaten = read_data(&philos[i].state, &philos[i].meals_eaten);
+		meals_eaten = read_int(&philos[i].state, &philos[i].meals_eaten);
 		if (meals_eaten < philos->input->times_must_eat)
 			return (0);
 		i++;
@@ -28,42 +69,43 @@ int	sim_done(t_philo *philos)
 	return (1);
 }
 
-void	sim_print_death(t_philo *philo)
+/*
+DESCRIPTION:
+	Checks if a philosopher has died.
+*/
+
+static int	philo_dead(t_philo *philo)
 {
-	if (pthread_mutex_lock(&philo->input->global_state))
-		return ;
-	printf("%lld %d %s\n", get_time() - philo->input->sim_start, philo->id, DEATH);
-	if (pthread_mutex_unlock(&philo->input->global_state))
-		return ;
+	int			meals_eaten;
+	long long	now;
+	long long	last_meal;
+
+	meals_eaten = read_int(&philo->state, &philo->meals_eaten);
+	if (meals_eaten < 0 || meals_eaten >= philo->input->times_must_eat)
+		return (0);
+	now = get_time();
+	last_meal = read_long_long(&philo->state, &philo->last_meal_time);
+	if (now < 0 || last_meal < 0)
+		return (0);
+	if (now - last_meal <= philo->input->time_to_die)
+		return (0);
+	return (1);
 }
 
-// if all philos have eaten 3 meals
-// if last_meal_time > time_to_die
-// then update sim_stop and print death message
-// should_stop_sim will return 1 if lock or unlock fails- which would stop simulation
-void	*monitor_sim(void *arg)
-{
-	t_philo *philos;
-	int i;
+/*
+DESCRIPTION:
+	Reads a long long value from a mutex.
+	Returns -1 on error.
+*/
 
-	philos = (t_philo *)arg;
-	while (!should_stop_sim(philos->input))
-	{
-		if (philos->input->times_must_eat != -1 && sim_done(philos))
-			return (stop_simulation(philos), NULL);
-		i = 0;
-		while (i < philos->input->philos)
-		{
-			if (get_time() - read_data(&philos[i].state,
-					&philos[i].last_meal_time) >= philos->input->time_to_die)
-			{
-				stop_simulation(philos);
-				sim_print_death(philos + i);
-				return (NULL);
-			}
-			i++;
-		}
-		usleep(philos->input->time_to_die * 1000);
-	}
-	return (NULL);
+static long long	read_long_long(pthread_mutex_t *mutex, long long *data)
+{
+	long long	ret;
+
+	if (mutex_op(mutex, MUTEX_LOCK, LOCK))
+		return (-1);
+	ret = *data;
+	if (mutex_op(mutex, MUTEX_UNLOCK, UNLOCK))
+		return (-1);
+	return (ret);
 }

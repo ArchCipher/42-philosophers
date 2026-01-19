@@ -12,8 +12,45 @@
 
 #include "philo.h"
 
-// in case of failure should pass i and philo_nbr
-void	join_threads(int philo_nbr, int end, pthread_t *thread_ids)
+static void	join_threads(int philo_nbr, int end, pthread_t *thread_ids);
+
+/*
+DESCRIPTION:
+	Creates and manages threads for the simulation.
+	Returns 1 on error and prints error message.
+*/
+
+int	create_manage_threads(t_input *input, t_philo *philos)
+{
+	int	i;
+
+	if (pthread_create(&input->thread_ids[input->philos], NULL, monitor_sim,
+			philos))
+		return (perr(CREATE, errno), 1);
+	i = 0;
+	while (i < input->philos)
+	{
+		if (input->philos % 2 && i == input->philos - 1)
+			precise_sleep(input->time_to_eat + 1);
+		if (pthread_create(&input->thread_ids[i], NULL, run_sim, philos + i))
+		{
+			stop_simulation(input);
+			join_threads(i, input->philos, input->thread_ids);
+			return (perr(CREATE, errno), 1);
+		}
+		i++;
+	}
+	usleep (10 * 1000);
+	join_threads(input->philos, input->philos, input->thread_ids);
+	return (0);
+}
+
+/*
+DESCRIPTION:
+	Joins threads for the simulation.
+	Returns 1 on error and prints error message.
+*/
+static void	join_threads(int philo_nbr, int end, pthread_t *thread_ids)
 {
 	int	i;
 
@@ -21,63 +58,16 @@ void	join_threads(int philo_nbr, int end, pthread_t *thread_ids)
 	while (i < end)
 	{
 		if (pthread_join(thread_ids[i++], NULL))
-			printf("pthread_join: %s\n", ft_strerror(errno));
+			perr(JOIN, errno);
 	}
 	if (pthread_join(thread_ids[philo_nbr], NULL))
-		printf("pthread_join: %s\n", ft_strerror(errno));
+		perr(JOIN, errno);
 }
 
-
-/*
-ERRORS
-		The pthread_mutex_destroy() function will fail if:
-
-		[EINVAL]           The value specified by mutex is invalid.
-
-		[EBUSY]            Mutex is locked.
-*/
-
-void	stop_simulation(t_philo *philo)
+void	stop_simulation(t_input *input)
 {
-	if (pthread_mutex_lock(&philo->input->global_state))
+	if (pthread_mutex_lock(&input->global_state))
 		return ;
-	philo->input->sim_stop = 1;
-	pthread_mutex_unlock(&philo->input->global_state);
-}
-
-// start routine - eat? or think or sleep?
-// when create_fails set sim_stop, join any created threads
-int	create_manage_threads(t_input *input, t_philo *philos)
-{
-	int	i;
-
-	input->sim_start = get_time();
-	if (pthread_create(&input->thread_ids[input->philos], NULL, monitor_sim,
-			philos))
-		return (printf("pthread_create: %s\n", ft_strerror(errno)), 1);
-	i = 1;
-	while (i < input->philos)
-	{
-		if (pthread_create(&input->thread_ids[i], NULL, run_sim, philos + i))
-		{
-			stop_simulation(philos + i);
-			join_threads(i, input->philos, input->thread_ids);
-			return (printf("pthread_create: %s\n", ft_strerror(errno)), 1);
-		}
-		i+=2;
-	}
-	i = 0;
-	usleep (10 * 1000);
-	while (i < input->philos)
-	{
-		if (pthread_create(&input->thread_ids[i], NULL, run_sim, philos + i))
-		{
-			stop_simulation(philos + i);
-			join_threads(i, input->philos, input->thread_ids);
-			return (printf("pthread_create: %s\n", ft_strerror(errno)), 1);
-		}
-		i+=2;
-	}
-	join_threads(input->philos, input->philos, input->thread_ids);
-	return (0);
+	input->sim_stop = 1;
+	pthread_mutex_unlock(&input->global_state);
 }

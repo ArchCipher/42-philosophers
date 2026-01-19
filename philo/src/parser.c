@@ -12,17 +12,37 @@
 
 #include "philo.h"
 
-int	ft_isspace(int c)
+static int	ft_atoi(const char *str);
+static int	ft_isspace(int c);
+static int	ft_isdigit(int c);
+
+// parser: positive number, no chars, max value
+// timestamps > 60ms
+
+int	parse_input(char **av, t_input *input)
 {
-	return (c == ' ' || (c >= '\t' && c <= '\r'));
+	errno = 0;
+	memset(input, 0, sizeof(t_input));
+	input->philos = ft_atoi(av[1]);
+	input->time_to_die = ft_atoi(av[2]);
+	input->time_to_eat = ft_atoi(av[3]);
+	input->time_to_sleep = ft_atoi(av[4]);
+	input->times_must_eat = -1;
+	if (av[5])
+		input->times_must_eat = ft_atoi(av[5]);
+	if (errno || input->philos < 1)
+		return (printf("philo: %s\n", E_INVAL));
+	if (input->time_to_die < 60 || input->time_to_eat < 60
+		|| input->time_to_sleep < 60)
+		return (printf("philo: %s\n", E_INVAL));
+	if (!av[5])
+		return (0);
+	if (input->times_must_eat < 0)
+		return (printf("philo: %s\n", E_INVAL));
+	return (0);
 }
 
-int	ft_isdigit(int c)
-{
-	return (c >= '0' && c <= '9');
-}
-
-int	ft_atoi(const char *str)
+static int	ft_atoi(const char *str)
 {
 	long	num;
 	int		sign;
@@ -49,28 +69,12 @@ int	ft_atoi(const char *str)
 	return ((int)(num * sign));
 }
 
-// parser: positive number, no chars, max value
-// timestamps > 60ms
-
-int	parse_input(char **av, t_input *input)
+static int	ft_isspace(int c)
 {
-	errno = 0;
-	memset(input, 0, sizeof(t_input));
-	input->philos = ft_atoi(av[1]);
-	input->time_to_die = ft_atoi(av[2]);
-	input->time_to_eat = ft_atoi(av[3]);
-	input->time_to_sleep = ft_atoi(av[4]);
-	input->times_must_eat = -1;
-	if (av[5])
-		input->times_must_eat = ft_atoi(av[5]);
-	if (errno || input->philos < 1)
-		return (printf("philo: %s\n", E_INVAL));
-	if (input->time_to_die < 60 || input->time_to_eat < 60
-		|| input->time_to_sleep < 60)
-		return (printf("philo: %s\n", E_INVAL));
-	if (!av[5])
-		return (0);
-	if (input->times_must_eat < 0)
-		return (printf("philo: %s\n", E_INVAL));
-	return (0);
+	return (c == ' ' || (c >= '\t' && c <= '\r'));
+}
+
+static int	ft_isdigit(int c)
+{
+	return (c >= '0' && c <= '9');
 }

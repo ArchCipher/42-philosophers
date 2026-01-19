@@ -12,33 +12,34 @@
 
 #include "philo.h"
 
-const char *ft_strerror(int errnum)
+static const char	*ft_strerror(int errnum);
+
+void	perr(const char *function, int errnum)
 {
-	if (errnum == EPERM)// 1
+	printf("%s: %s\n", function, ft_strerror(errnum));
+}
+
+static const char	*ft_strerror(int errnum)
+{
+	if (errnum == EPERM)
 		return (E_PERM);
-	if (errnum == EAGAIN)//11
-		return (E_AGAIN);
-	if (errnum == EINVAL)// 22
-		return (E_INVAL);
-	if (errnum == EDEADLK)// 35
-		return (E_DEADLK);
-	if (errnum == ESRCH)// 3
+	if (errnum == ESRCH)
 		return (E_SRCH);
-	if (errnum == EFAULT)// 14
+	if (errnum == EDEADLK)
+		return (E_DEADLK);
+	if (errnum == ENOMEM)
+		return (E_NOMEM);
+	if (errnum == EFAULT)
 		return (E_FAULT);
-	if (errnum == ENOTRECOVERABLE)// 131
-		return (E_NOTRECOVERABLE);
-	if (errnum == EOWNERDEAD)// 130
-		return (E_OWNERDEAD);
 	if (errnum == EBUSY)
 		return (E_BUSY);
+	if (errnum == EINVAL)
+		return (E_INVAL);
+	if (errnum == EAGAIN)
+		return (E_AGAIN);
+	if (errnum == ENOTRECOVERABLE)
+		return (E_NOTRECOVERABLE);
+	if (errnum == EOWNERDEAD)
+		return (E_OWNERDEAD);
 	return ("Unknown error");
 }
-/*
-create
-join
-mutex_destroy
-gettimeofday
-
-mutex unlock/lock
-*/

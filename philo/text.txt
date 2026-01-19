@@ -1,63 +1,8 @@
 ./philo 5 600 200 200
-14 3 has taken a fork
-14 3 has taken a fork
-14 3 is eating
-14 4 has taken a fork
-14 1 has taken a fork
-15 1 has taken a fork
-15 1 is eating
-215 1 is sleeping
-218 3 is sleeping
-218 2 has taken a fork
-218 2 has taken a fork
-218 2 is eating
-218 4 has taken a fork
-218 4 is eating
-418 4 is sleeping
-418 1 is thinking
-418 5 has taken a fork
-418 5 has taken a fork
-418 5 is eating
-418 3 is thinking
-419 3 has taken a fork
-419 3 has taken a fork
-419 3 is eating
-421 2 is sleeping
-618 4 is thinking
-619 3 is sleeping
-619 4 has taken a fork
-619 4 has taken a fork
-619 4 is eating
-619 5 is sleeping
-621 2 is thinking
-622 1 has taken a fork
-622 1 has taken a fork
-622 1 is eating
-622 2 has taken a fork
-819 3 is thinking
-819 5 is thinking
-819 4 is sleeping
-820 5 has taken a fork
-822 5 has taken a fork
-822 5 is eating
-823 1 is sleeping
-823 2 has taken a fork
-823 2 is eating
-1019 4 is thinking
-1022 5 is sleeping
-1022 4 has taken a fork
-1022 4 has taken a fork
-1022 4 is eating
-1023 2 is sleeping
-1023 3 has taken a fork
-1023 1 is thinking
-1024 1 has taken a fork
-1024 1 has taken a fork
-1024 1 is eating
-1211 3 died
-
 
 ---- shouldn't die. philo 3 cant eat as other got greedy. need to work this out
+
+
 
 
 Testing uneven numbers (overkill) - they shouldn't die
