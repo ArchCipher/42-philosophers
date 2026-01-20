@@ -48,7 +48,7 @@ int	main(int ac, char **av)
 		return (0);
 	philos = malloc(sizeof(t_philo) * input.philos);
 	if (!philos)
-		return (printf("malloc: %s\n", E_NOMEM), 1);
+		return (perr("malloc", errno), 1);
 	if (init_philo(&input, philos))
 		return (free(philos), 1);
 	create_manage_threads(&input, philos);

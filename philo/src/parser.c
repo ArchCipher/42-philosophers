@@ -31,14 +31,14 @@ int	parse_input(char **av, t_input *input)
 	if (av[5])
 		input->times_must_eat = ft_atoi(av[5]);
 	if (errno || input->philos < 1)
-		return (printf("philo: %s\n", E_INVAL));
+		return (perr("philo", errno), 1);
 	if (input->time_to_die < 60 || input->time_to_eat < 60
 		|| input->time_to_sleep < 60)
-		return (printf("philo: %s\n", E_INVAL));
+		return (perr("philo", EINVAL), 1);
 	if (!av[5])
 		return (0);
 	if (input->times_must_eat < 0)
-		return (printf("philo: %s\n", E_INVAL));
+		return (perr("philo", EINVAL), 1);
 	return (0);
 }
 

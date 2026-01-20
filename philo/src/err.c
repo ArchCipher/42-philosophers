@@ -21,25 +21,22 @@ void	perr(const char *function, int errnum)
 
 static const char	*ft_strerror(int errnum)
 {
-	if (errnum == EPERM)
-		return (E_PERM);
-	if (errnum == ESRCH)
-		return (E_SRCH);
-	if (errnum == EDEADLK)
-		return (E_DEADLK);
-	if (errnum == ENOMEM)
-		return (E_NOMEM);
-	if (errnum == EFAULT)
-		return (E_FAULT);
-	if (errnum == EBUSY)
-		return (E_BUSY);
-	if (errnum == EINVAL)
-		return (E_INVAL);
-	if (errnum == EAGAIN)
-		return (E_AGAIN);
-	if (errnum == ENOTRECOVERABLE)
-		return (E_NOTRECOVERABLE);
-	if (errnum == EOWNERDEAD)
-		return (E_OWNERDEAD);
+	static const t_err	errs[] = {{EPERM, "Operation not permitted"},
+	{ESRCH, "No such process"}, {EDEADLK, "Resource deadlock avoided"},
+	{ENOMEM, "Out of memory"}, {EFAULT, "Bad address"},
+	{EBUSY, "Device or resource busy"}, {EINVAL, "Invalid argument"},
+	{ERANGE, "Numerical result out of range"},
+	{EAGAIN, "Resource temporarily unavailable"},
+	{ENOTRECOVERABLE, "State not recoverable"}, {EOWNERDEAD, "Owner died"}};
+	int					i;
+
+	i = 0;
+	while (i < (sizeof(errs) / sizeof(errs[0])))
+	{
+		if (errs[i].code == errnum)
+			return (errs[i].msg);
+		i++;
+	}
 	return ("Unknown error");
 }
+

@@ -14,16 +14,6 @@
 // error messages
 # define E_ARGS1 "number_of_philosophers time_to_die time_to_eat time_to_sleep"
 # define E_ARGS2 "[number_of_times_each_philosopher_must_eat]"
-# define E_INVAL "Invalid argument"
-# define E_NOMEM "Out of memory"
-# define E_AGAIN "Resource temporarily unavailable"
-# define E_PERM "Operation not permitted"
-# define E_DEADLK "Resource deadlock avoided"
-# define E_SRCH "No such process"
-# define E_FAULT "Bad address"
-# define E_NOTRECOVERABLE "State not recoverable"
-# define E_OWNERDEAD "Owner died"
-# define E_BUSY "Device or resource busy"
 
 // actions
 # define TAKE_FORK "has taken a fork"
@@ -39,6 +29,13 @@
 # define DESTROY "pthread_mutex_destroy"
 # define LOCK "pthread_mutex_lock"
 # define UNLOCK "pthread_mutex_unlock"
+
+typedef struct s_err
+{
+	int			code;
+	const char	*msg;
+}				t_err;
+
 
 typedef enum e_mutex_op
 {
