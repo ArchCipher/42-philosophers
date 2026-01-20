@@ -25,21 +25,21 @@ void	*run_sim(void *arg)
 	if (philo->input->philos == 1)
 	{
 		sim_print(philo, TAKE_FORK, false);
-		while (!should_stop_sim(philo->input))
-			usleep(1000);
+		while (!sim_done(philo->input))
+			precise_sleep(1e3);
 		return (NULL);
 	}
 	if (philo->id % 2)
-		usleep(1000);
-	while (!should_stop_sim(philo->input) && (philo->input->times_must_eat <= 0
+		precise_sleep(1e3);
+	while (!sim_done(philo->input) && (philo->input->times_must_eat < 0
 			|| read_int(&philo->state,
 				&philo->meals_eaten) < philo->input->times_must_eat))
 	{
 		sim_eat(philo);
-		if (should_stop_sim(philo->input))
+		if (sim_done(philo->input))
 			break ;
 		sim_sleep(philo);
-		if (should_stop_sim(philo->input))
+		if (sim_done(philo->input))
 			break ;
 		sim_think(philo);
 	}

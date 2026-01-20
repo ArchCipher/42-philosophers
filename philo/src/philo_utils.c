@@ -26,7 +26,7 @@ long long	get_time(bool usec)
 		return (perr("gettimeofday", errno), -1);
 	if (usec)
 		return ((tp.tv_sec * 1e6) + tp.tv_usec);
-	return ((tp.tv_sec * 1000) + (tp.tv_usec / 1000));
+	return ((tp.tv_sec * 1e3) + (tp.tv_usec / 1e3));
 }
 
 /*
@@ -43,7 +43,7 @@ void	sim_print(t_philo *philo, const char *action, bool is_death)
 		return ;
 	if (mutex_op(&philo->input->global_state, MUTEX_LOCK, LOCK))
 		return ;
-	if (!philo->input->sim_stop || is_death)
+	if (!philo->input->sim_done || is_death)
 		printf("%lld %d %s\n", now - philo->input->sim_start, philo->id,
 			action);
 	if (mutex_op(&philo->input->global_state, MUTEX_UNLOCK, UNLOCK))
@@ -68,9 +68,9 @@ int	read_int(pthread_mutex_t *mutex, int *data)
 	return (ret);
 }
 
-int	should_stop_sim(t_input *input)
+int	sim_done(t_input *input)
 {
-	return (read_int(&input->global_state, &input->sim_stop));
+	return (read_int(&input->global_state, &input->sim_done));
 }
 
 void	precise_sleep(long long usec)

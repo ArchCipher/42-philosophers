@@ -11,6 +11,8 @@
 # include <sys/time.h>
 # include <unistd.h>
 
+# define PROG "philo"
+
 // error messages
 # define E_ARGS1 "number_of_philosophers time_to_die time_to_eat time_to_sleep"
 # define E_ARGS2 "[number_of_times_each_philosopher_must_eat]"
@@ -53,7 +55,7 @@ typedef struct s_input
 	int				time_to_sleep;
 	int				times_must_eat;
 	long long		sim_start;
-	int				sim_stop;
+	int				sim_done;
 	pthread_t		*thread_ids;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	global_state;
@@ -80,15 +82,15 @@ void				destroy_mutexes(t_input *input, t_philo *philos, int end);
 int					create_manage_threads(t_input *input, t_philo *philos);
 void				*run_sim(void *arg);
 void				*monitor_sim(void *arg);
-void				stop_simulation(t_input *input);
+void				stop_sim(t_input *input);
 
 long long			get_time(bool usec);
 void				sim_print(t_philo *philo, const char *action,
 						bool is_death);
 int					read_int(pthread_mutex_t *state, int *data);
-int					should_stop_sim(t_input *input);
+int					sim_done(t_input *input);
 void				precise_sleep(long long usec);
 
-void				perr(const char *function, int errnum);
+void				perr(const char *name, int errnum);
 
 #endif

@@ -41,7 +41,7 @@ int	main(int ac, char **av)
 	t_philo	*philos;
 
 	if (ac != 5 && ac != 6)
-		return (printf("USAGE: ./philo %s %s\n", E_ARGS1, E_ARGS2));
+		return (printf("USAGE: ./%s %s %s\n", PROG, E_ARGS1, E_ARGS2));
 	if (parse_input(av, &input))
 		return (1);
 	if (av[5] && !input.times_must_eat)

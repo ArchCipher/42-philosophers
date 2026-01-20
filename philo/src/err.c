@@ -14,9 +14,9 @@
 
 static const char	*ft_strerror(int errnum);
 
-void	perr(const char *function, int errnum)
+void	perr(const char *name, int errnum)
 {
-	printf("%s: %s\n", function, ft_strerror(errnum));
+	printf("%s: %s\n", name, ft_strerror(errnum));
 }
 
 static const char	*ft_strerror(int errnum)

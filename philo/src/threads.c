@@ -34,13 +34,12 @@ int	create_manage_threads(t_input *input, t_philo *philos)
 			precise_sleep((input->time_to_eat + 1) * 1e3);
 		if (pthread_create(&input->thread_ids[i], NULL, run_sim, philos + i))
 		{
-			stop_simulation(input);
+			stop_sim(input);
 			join_threads(i, input->philos, input->thread_ids);
 			return (perr(CREATE, errno), 1);
 		}
 		i++;
 	}
-	usleep (10 * 1000);
 	join_threads(input->philos, input->philos, input->thread_ids);
 	return (0);
 }

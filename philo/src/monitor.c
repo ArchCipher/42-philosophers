@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-static int			sim_done(t_philo *philos);
+static int			philo_full(t_philo *philos);
 static int			philo_dead(t_philo *philo);
 static long long	read_long_long(pthread_mutex_t *mutex, long long *data);
 
@@ -28,16 +28,16 @@ void	*monitor_sim(void *arg)
 	int		i;
 
 	philos = (t_philo *)arg;
-	while (!should_stop_sim(philos->input))
+	while (!sim_done(philos->input))
 	{
-		if (philos->input->times_must_eat > 0 && sim_done(philos))
-			return (stop_simulation(philos->input), NULL);
+		if (philos->input->times_must_eat > 0 && philo_full(philos))
+			return (stop_sim(philos->input), NULL);
 		i = 0;
 		while (i < philos->input->philos)
 		{
 			if (philo_dead(philos + i))
 			{
-				stop_simulation(philos->input);
+				stop_sim(philos->input);
 				sim_print(philos + i, DEATH, true);
 				return (NULL);
 			}
@@ -53,7 +53,7 @@ DESCRIPTION:
 	Checks if all philosophers have eaten enough.
 */
 
-static int	sim_done(t_philo *philos)
+static int	philo_full(t_philo *philos)
 {
 	int	i;
 	int	meals_eaten;
@@ -114,10 +114,10 @@ static long long	read_long_long(pthread_mutex_t *mutex, long long *data)
 	return (ret);
 }
 
-void	stop_simulation(t_input *input)
+void	stop_sim(t_input *input)
 {
 	if (pthread_mutex_lock(&input->global_state))
 		return ;
-	input->sim_stop = 1;
+	input->sim_done = 1;
 	pthread_mutex_unlock(&input->global_state);
 }
