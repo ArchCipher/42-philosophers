@@ -25,7 +25,7 @@ int	init_philo(t_input *input, t_philo *philos)
 	input->thread_ids = malloc(sizeof(pthread_t) * (input->philos + 1));
 	if (!input->thread_ids)
 		return (perr("malloc", errno), free(input->forks), 1);
-	input->sim_start = get_time();
+	input->sim_start = get_time(false);
 	if (input->sim_start < 0)
 		return (free(input->forks), free(input->thread_ids), 1);
 	init_threads(input, philos);

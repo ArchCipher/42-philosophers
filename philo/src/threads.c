@@ -30,8 +30,8 @@ int	create_manage_threads(t_input *input, t_philo *philos)
 	i = 0;
 	while (i < input->philos)
 	{
-		if (input->philos % 2 && i == input->philos - 1)
-			precise_sleep(input->time_to_eat + 1);
+		if (input->philos > 1 && input->philos % 2 && i == input->philos - 1)
+			precise_sleep((input->time_to_eat + 1) * 1e3);
 		if (pthread_create(&input->thread_ids[i], NULL, run_sim, philos + i))
 		{
 			stop_simulation(input);

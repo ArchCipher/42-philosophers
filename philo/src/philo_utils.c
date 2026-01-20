@@ -18,12 +18,14 @@ DESCRIPTION:
 	Returns -1 on error and prints error message.
 */
 
-long long	get_time(void)
+long long	get_time(bool usec)
 {
 	struct timeval	tp;
 
 	if (gettimeofday(&tp, NULL))
 		return (perr("gettimeofday", errno), -1);
+	if (usec)
+		return ((tp.tv_sec * 1e6) + tp.tv_usec);
 	return ((tp.tv_sec * 1000) + (tp.tv_usec / 1000));
 }
 
@@ -36,7 +38,7 @@ void	sim_print(t_philo *philo, const char *action, bool is_death)
 {
 	long long	now;
 
-	now = get_time();
+	now = get_time(false);
 	if (now < 0)
 		return ;
 	if (mutex_op(&philo->input->global_state, MUTEX_LOCK, LOCK))
@@ -71,22 +73,24 @@ int	should_stop_sim(t_input *input)
 	return (read_int(&input->global_state, &input->sim_stop));
 }
 
-void	precise_sleep(long long millisec)
+void	precise_sleep(long long usec)
 {
 	long long	start;
 	long long	rem;
 
-	start = get_time();
+	start = get_time(true);
 	if (start < 0)
 		return ;
-	while (get_time() - start < millisec)
+	while (get_time(true) - start < usec)
 	{
-		rem = millisec - (get_time() - start);
-		if (rem > 1)
-			usleep((rem * 1000) / 2);
+		// if (should_stop_sim(input))
+		// 	break ;
+		rem = usec - (get_time(true) - start);
+		if (rem > 1e3)
+			usleep(rem / 2);
 		else
 		{
-			while (get_time() - start < millisec)
+			while (get_time(true) - start < usec)
 				;
 		}
 	}

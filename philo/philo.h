@@ -5,7 +5,6 @@
 # include <limits.h>
 # include <pthread.h>
 # include <stdbool.h>
-# include <stdint.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -86,12 +85,12 @@ void				*run_sim(void *arg);
 void				*monitor_sim(void *arg);
 void				stop_simulation(t_input *input);
 
-long long			get_time(void);
+long long			get_time(bool usec);
 void				sim_print(t_philo *philo, const char *action,
 						bool is_death);
 int					read_int(pthread_mutex_t *state, int *data);
 int					should_stop_sim(t_input *input);
-void				precise_sleep(long long millisec);
+void				precise_sleep(long long usec);
 
 void				perr(const char *function, int errnum);
 

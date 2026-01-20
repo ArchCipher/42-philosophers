@@ -61,7 +61,7 @@ static void	sim_eat(t_philo *philo)
 	sim_print(philo, TAKE_FORK, false);
 	update_meal_state(philo);
 	sim_print(philo, EAT, false);
-	precise_sleep(philo->input->time_to_eat);
+	precise_sleep(philo->input->time_to_eat * 1e3);
 	mutex_op(philo->first_fork, MUTEX_UNLOCK, UNLOCK);
 	mutex_op(philo->second_fork, MUTEX_UNLOCK, UNLOCK);
 }
@@ -69,7 +69,7 @@ static void	sim_eat(t_philo *philo)
 static void	sim_sleep(t_philo *philo)
 {
 	sim_print(philo, SLEEP, false);
-	precise_sleep(philo->input->time_to_sleep);
+	precise_sleep(philo->input->time_to_sleep * 1e3);
 }
 
 static void	sim_think(t_philo *philo)
@@ -83,14 +83,14 @@ static void	sim_think(t_philo *philo)
 		return ;
 	t_think = (input->time_to_eat * 2) - input->time_to_sleep;
 	if (t_think > 0)
-		precise_sleep(t_think - 10);
+		precise_sleep((t_think - 2) * 1e3);
 }
 
 static void	update_meal_state(t_philo *philo)
 {
 	if (mutex_op(&philo->state, MUTEX_LOCK, LOCK))
 		return ;
-	philo->last_meal_time = get_time();
+	philo->last_meal_time = get_time(false);
 	philo->meals_eaten++;
 	if (mutex_op(&philo->state, MUTEX_UNLOCK, UNLOCK))
 		return ;

@@ -35,7 +35,7 @@ void	*monitor_sim(void *arg)
 		i = 0;
 		while (i < philos->input->philos)
 		{
-			if (philos->input->times_must_eat > 0 && philo_dead(philos + i))
+			if (philo_dead(philos + i))
 			{
 				stop_simulation(philos->input);
 				sim_print(philos + i, DEATH, true);
@@ -43,7 +43,7 @@ void	*monitor_sim(void *arg)
 			}
 			i++;
 		}
-		precise_sleep(5);
+		precise_sleep(2 * 1e3);
 	}
 	return (NULL);
 }
@@ -77,17 +77,21 @@ DESCRIPTION:
 static int	philo_dead(t_philo *philo)
 {
 	int			meals_eaten;
+	int			must_eat;
 	long long	now;
 	long long	last_meal;
 
-	meals_eaten = read_int(&philo->state, &philo->meals_eaten);
-	if (meals_eaten < 0 || meals_eaten >= philo->input->times_must_eat)
+	must_eat = philo->input->times_must_eat;
+	if (philo->input->philos > 1 && must_eat < 0)
 		return (0);
-	now = get_time();
+	meals_eaten = read_int(&philo->state, &philo->meals_eaten);
+	if (meals_eaten < 0 || (must_eat > 0 && meals_eaten >= must_eat))
+		return (0);
+	now = get_time(false);
 	last_meal = read_long_long(&philo->state, &philo->last_meal_time);
 	if (now < 0 || last_meal < 0)
 		return (0);
-	if (now - last_meal <= philo->input->time_to_die)
+	if (now - last_meal < philo->input->time_to_die)
 		return (0);
 	return (1);
 }
