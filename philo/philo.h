@@ -85,8 +85,7 @@ void				*monitor_sim(void *arg);
 void				stop_sim(t_input *input);
 
 long long			get_time(bool usec);
-void				sim_print(t_philo *philo, const char *action,
-						bool is_death);
+void				sim_print(t_philo *philo, const char *msg, bool is_death);
 int					read_int(pthread_mutex_t *state, int *data);
 int					sim_done(t_input *input);
 void				precise_sleep(long long usec);

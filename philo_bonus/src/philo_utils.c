@@ -34,43 +34,20 @@ DESCRIPTION:
 	Prints simulation status to stdout.
 */
 
-void	sim_print(t_philo *philo, const char *msg, bool is_death)
+void	sim_print(t_philo *philo, const char *msg)
 {
 	long long	now;
 
 	now = get_time(false);
 	if (now < 0)
 		return ;
-	if (mutex_op(&philo->input->global_state, MUTEX_LOCK, LOCK))
-		return ;
-	if (!philo->input->sim_done || is_death)
-		printf("%lld %d %s\n", now - philo->input->sim_start, philo->id, msg);
-	if (mutex_op(&philo->input->global_state, MUTEX_UNLOCK, UNLOCK))
-		return ;
+	if (sem_wait(philo->input->print))
+		return ; // perr
+	printf("%lld %d %s\n", now - philo->input->sim_start, philo->id, msg);
+	if (sem_post(philo->input->print))
+		return ; // perr
 }
 
-/*
-DESCRIPTION:
-	Reads an int value from a mutex.
-	Returns -1 on error.
-*/
-
-int	read_int(pthread_mutex_t *mutex, int *data)
-{
-	int	ret;
-
-	if (mutex_op(mutex, MUTEX_LOCK, LOCK))
-		return (-1);
-	ret = *data;
-	if (mutex_op(mutex, MUTEX_UNLOCK, UNLOCK))
-		return (-1);
-	return (ret);
-}
-
-int	sim_done(t_input *input)
-{
-	return (read_int(&input->global_state, &input->sim_done));
-}
 
 void	precise_sleep(long long usec)
 {
