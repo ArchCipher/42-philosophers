@@ -12,6 +12,9 @@
 
 #include "philo.h"
 
+static int	fork_processes(t_input *input);
+static int	wait_processes(t_input *input);
+static void	cleanup(t_input *input);
 /*
 	NAME
 		philo
@@ -34,62 +37,82 @@
 		sem_post, sem_wait, sem_unlink
 */
 
-void	exec_child(t_philo *philo)
+int	main(int ac, char **av)
 {
-	if (pthread_create(&philo->thread_id, NULL, monitor_sim, philo))
-	{
-		perr(CREATE, errno);
-		exit(-1);
-	}
-	run_sim(philo);
-	if (pthread_join(philo->thread_id, NULL))
-		perr(JOIN, errno);
-	sem_close(philo->input->forks);
-	sem_close(philo->input->print);
-	exit (0);
+	t_input	input;
+	int		ret;
+
+	if (ac != 5 && ac != 6)
+		return (printf("USAGE: ./%s %s %s\n", PROG, E_ARGS1, E_ARGS2));
+	if (parse_input(av, &input))
+		return (1);
+	if (av[5] && input.times_must_eat)
+		return (0);
+	if (init_sem(&input))
+		return (1);
+	input.pids = malloc(sizeof(pid_t) * input.philos);
+	ret = 1;
+	if (input.pids && fork_processes(&input) >= 0)
+		ret = wait_processes(&input);
+	cleanup(&input);
+	return (ret);
 }
 
-int	fork_processes(t_input *input)
+/*
+DESCRIPTION:
+	Fork processes and initialize the simulation.
+*/
+
+static int	fork_processes(t_input *input)
 {
-	t_philo	philo;
 	int		i;
 
+	memset(input->pids, -1, sizeof(pid_t) * input->philos);
 	i = 0;
 	while (i < input->philos)
 	{
 		input->pids[i] = fork();
+		if (i == 0)
+		{
+			input->sim_start = get_time_safe(false);
+			if (input->sim_start < 0)
+			{
+				kill(input->pids[0], SIGTERM);
+				waitpid(input->pids[0], NULL, 0);
+				return (-1);
+			}
+		}
 		if (input->pids[i] == -1)
 			return (perr("fork", errno), 1);
 		if (input->pids[i] == 0)
-		{
-			philo.id = (i + 1) % input->philos;
-			philo.meals_eaten = 0;
-			philo.sim_done = 0;
-			input->sim_start = get_time(false);
-			philo.last_meal_time = input->sim_start;
-			philo.input = input;
-			exec_child(&philo);
-		}
+			exec_child(input, i + 1);
+		i++;
 	}
 	return (0);
 }
 
-// pid_t waitpid(pid_t pid, int *stat_loc, int options);
-int	wait_processes(t_input *input)
+/*
+DESCRIPTION:
+	Wait for processes to finish and clean up.
+*/
+
+static int	wait_processes(t_input *input)
 {
 	pid_t	child;
 	int		status;
 	int		i;
 
 	child = waitpid(-1, &status, 0);
+	if (child == -1)
+		return (perr("waitpid", errno), 1);
 	i = 0;
-	while(i < input->philos)
+	while (i < input->philos)
 	{
-		if (child != input->pids[i])
-			kill(input->pids[i]);
+		if (input->pids[i] != -1 && child != input->pids[i])
+			kill(input->pids[i], SIGTERM);
 		i++;
 	}
-	while(waitpid(-1, NULL, 0) > 0)
+	while (waitpid(-1, NULL, 0) > 0)
 		;
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
@@ -98,29 +121,15 @@ int	wait_processes(t_input *input)
 	return (1);
 }
 
+/*
+DESCRIPTION:
+	Cleans up the input and frees the memory.
+*/
 
-int	main(int ac, char **av)
+static void	cleanup(t_input *input)
 {
-	t_input	*input;
-	int		ret;
-
-	if (ac != 5 && ac != 6)
-		return (printf("USAGE: ./%s %s %s\n", PROG, E_ARGS1, E_ARGS2));
-	if (parse_input(av, input))
-		return (1);
-	if (av[5] && input->times_must_eat)
-		return (0);
-	if (init_sem(input))
-		return (1);
-	input->pids = malloc(sizeof(pid_t) * input->philos);
-	ret = 1;
 	if (input->pids)
-	{
-		fork_processes(input);
-		ret = wait_processes(input);
 		free(input->pids);
-	}
 	sem_close(input->forks);
 	sem_close(input->print);
-	return (ret);
 }

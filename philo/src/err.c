@@ -28,7 +28,7 @@ static const char	*ft_strerror(int errnum)
 	{ERANGE, "Numerical result out of range"},
 	{EAGAIN, "Resource temporarily unavailable"},
 	{ENOTRECOVERABLE, "State not recoverable"}, {EOWNERDEAD, "Owner died"}};
-	int					i;
+	unsigned long		i;
 
 	i = 0;
 	while (i < (sizeof(errs) / sizeof(errs[0])))

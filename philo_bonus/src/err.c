@@ -14,6 +14,12 @@
 
 static const char	*ft_strerror(int errnum);
 
+void	error_exit_child(const char *name, int errnum)
+{
+	perr(name, errnum);
+	exit(1);
+}
+
 void	perr(const char *name, int errnum)
 {
 	printf("%s: %s\n", name, ft_strerror(errnum));
@@ -30,7 +36,7 @@ static const char	*ft_strerror(int errnum)
 	{ERANGE, "Numerical result out of range"},
 	{EAGAIN, "Resource temporarily unavailable"},
 	{ENAMETOOLONG, "File name too long"}};
-	int					i;
+	unsigned long		i;
 
 	i = 0;
 	while (i < (sizeof(errs) / sizeof(errs[0])))

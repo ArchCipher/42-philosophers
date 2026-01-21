@@ -12,23 +12,6 @@
 
 #include "philo.h"
 
-/*
-sem_t * sem_open(const char *name, int oflag, ...);
-
-int sem_close(sem_t *sem);
-The system resources associated with the named semaphore referenced by sem are
-deallocated and the descriptor is invalidated.
-
-int
-     sem_unlink(const char *name);
-The named semaphore named name is removed.
-If the semaphore is in use by other processes, then name is immediately
-disassociated with the semaphore, but the semaphore itself will not be removed
-until all references to it have been closed.
-Subsequent calls to sem_open() using name will refer to or create a new
-semaphore named name.
-*/
-
 static int open_sem(const char *name, sem_t **sem, int n);
 
 // on linux implemented under /dev/shm/sem.forks
@@ -51,21 +34,3 @@ static int open_sem(const char *name, sem_t **sem, int n)
         return (perr(OPEN, errno), 1);
     return (0);
 }
-
-/*
-Parent:
-  sem_unlink(old)
-  sem_open(new)
-  fork N children
-  wait for children
-  sem_close
-
-Children:
-  inherit semaphore
-  use it
-  sem_close
-  exit
-
-Kernel:
-  destroys semaphore automatically
-*/

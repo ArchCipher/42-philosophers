@@ -13,9 +13,7 @@
 #include "philo.h"
 
 
-static int			philo_full(t_philo *philos);
 static int			philo_dead(t_philo *philo);
-static long long	read_long_long(pthread_mutex_t *mutex, long long *data);
 
 /*
 DESCRIPTION:
@@ -25,35 +23,18 @@ DESCRIPTION:
 
 void	*monitor_sim(void *arg)
 {
-	t_philo	*philo;
-	int		i;
+	t_philo		*philo;
+	long long	start;
 
 	philo = (t_philo *)arg;
-	while (!philo->sim_done)
-	{
-		if (philo_dead(philo))
-		{
-			philo->sim_done = 1;
-			sim_print(philo, DEATH);
-			return (NULL);
-		}
+	start = philo->input->sim_start;
+	while (!philo_dead(philo))
 		precise_sleep(2 * 1e3);
-	}
+	if (sem_wait(philo->input->print))
+		error_exit_child(WAIT, errno);
+	printf("%lld %d %s\n", get_time(false) - start, philo->id, DEATH);
+	exit (1);
 	return (NULL);
-}
-
-/*
-DESCRIPTION:
-	Checks if all philosophers have eaten enough.
-*/
-
-static int	philo_full(t_philo *philo)
-{
-	int	meals_eaten;
-
-	if (philo->meals_eaten < philo->input->times_must_eat)
-		return (0);
-	return (1);
 }
 
 /*
@@ -63,18 +44,12 @@ DESCRIPTION:
 
 static int	philo_dead(t_philo *philo)
 {
-	int			must_eat;
-	long long	now;
+	int	must_eat;
+	int	t_to_die;
 
 	must_eat = philo->input->times_must_eat;
-	if (philo->input->philos > 1 && must_eat < 0)
+	t_to_die = philo->input->time_to_die;
+	if (must_eat > 0 && philo->meals_eaten >= must_eat)
 		return (0);
-	if (philo->meals_eaten >= must_eat)
-		return (0);
-	now = get_time(false);
-	if (now < 0)
-		return (0);
-	if (now - philo->last_meal_time < philo->input->time_to_die)
-		return (0);
-	return (1);
+	return (get_time(false) - philo->last_meal_time >= t_to_die);
 }

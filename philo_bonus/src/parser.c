@@ -14,7 +14,7 @@
 
 static int	ft_atoi(const char *str);
 static int	ft_isspace(int c);
-static int	ft_isdigit(int c);
+// static int	ft_isdigit(int c);
 
 // parser: positive number, no chars, max value
 // timestamps > 60ms
@@ -72,9 +72,4 @@ static int	ft_atoi(const char *str)
 static int	ft_isspace(int c)
 {
 	return (c == ' ' || (c >= '\t' && c <= '\r'));
-}
-
-static int	ft_isdigit(int c)
-{
-	return (c >= '0' && c <= '9');
 }

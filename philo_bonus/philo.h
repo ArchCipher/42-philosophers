@@ -1,9 +1,13 @@
 #ifndef PHILO_H
 # define PHILO_H
 
+# include "ft_printf/ft_printf.h"
 # include <errno.h>
 # include <limits.h>
+# include <pthread.h>
 # include <semaphore.h>
+# include <signal.h>
+# include <stdatomic.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -24,15 +28,13 @@
 # define THINK "is thinking"
 # define DEATH "died"
 
-// thread and mutex function names
+// semaphore and thread function names
 # define OPEN "sem_open"
+# define WAIT "sem_wait"
+# define POST "sem_post"
 
 # define CREATE "pthread_create"
 # define JOIN "pthread_join"
-# define INIT "pthread_mutex_init"
-# define DESTROY "pthread_mutex_destroy"
-# define LOCK "pthread_mutex_lock"
-# define UNLOCK "pthread_mutex_unlock"
 
 # define SIG_EXIT_BASE 128
 
@@ -65,23 +67,25 @@ typedef struct s_input
 
 typedef struct s_philo
 {
-	int			id;
-	long long	last_meal_time;
-	int			meals_eaten;
-	// _Atomic int sim_done;
-	volatile sig_atomic_t	sim_done;
-	t_input		*input;
-	pthread_t	thread_id;
+	int					id;
+	_Atomic long long	last_meal_time;
+	_Atomic int			meals_eaten;
+	t_input				*input;
+	pthread_t			thread_id;
 }				t_philo;
 
 int				parse_input(char **av, t_input *input);
 
-long long		get_time(bool usec);
+int				init_sem(t_input *input);
+
+void			exec_child(t_input *input, int id);
 void			*monitor_sim(void *arg);
 
-void			sim_print(t_philo *philo, const char *msg);
+long long		get_time_safe(bool usec);
+long long		get_time(bool usec);
 void			precise_sleep(long long usec);
 
+void			error_exit_child(const char *name, int errnum);
 void			perr(const char *name, int errnum);
 
 #endif

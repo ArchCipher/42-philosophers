@@ -36,15 +36,11 @@ DESCRIPTION:
 
 void	sim_print(t_philo *philo, const char *msg, bool is_death)
 {
-	long long	now;
-
-	now = get_time(false);
-	if (now < 0)
-		return ;
 	if (mutex_op(&philo->input->global_state, MUTEX_LOCK, LOCK))
 		return ;
 	if (!philo->input->sim_done || is_death)
-		printf("%lld %d %s\n", now - philo->input->sim_start, philo->id, msg);
+		printf("%lld %d %s\n", get_time(false) - philo->input->sim_start,
+			philo->id, msg);
 	if (mutex_op(&philo->input->global_state, MUTEX_UNLOCK, UNLOCK))
 		return ;
 }

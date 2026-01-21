@@ -12,52 +12,59 @@
 
 #include "philo.h"
 
+static void	run_sim(t_philo *philo);
 static void	sim_eat(t_philo *philo);
 static void	sim_sleep(t_philo *philo);
-static void	sim_think(t_philo *philo);
-static void	update_meal_state(t_philo *philo);
+// static void	sim_think(t_philo *philo);
+static void	sim_print(t_philo *philo, const char *msg);
+
+void	exec_child(t_input *input, int id)
+{
+	t_philo	philo;
+
+	philo.id = id;
+	philo.meals_eaten = 0;
+	philo.last_meal_time = input->sim_start;
+	philo.input = input;
+	if (pthread_create(&philo.thread_id, NULL, monitor_sim, &philo))
+		error_exit_child(CREATE, errno);
+	pthread_detach(philo.thread_id);
+	run_sim(&philo);
+	exit (0);
+}
 
 void	run_sim(t_philo *philo)
 {
-	int	must_eat;
-
-	must_eat = philo->input->times_must_eat;
-	while (!philo->sim_done)
+	while (1)
 	{
 		sim_eat(philo);
-		if (philo->sim_done)
-			break ;
+		if (philo->meals_eaten == philo->input->times_must_eat)
+			return ;
 		sim_sleep(philo);
-		if (philo->sim_done)
-			break ;
-		sim_think(philo);
+		sim_print(philo, THINK);
 	}
 }
-
-// make meals eaten not read by monitor?
 
 static void	sim_eat(t_philo *philo)
 {
 	if (sem_wait(philo->input->forks))
-		return ;
+		error_exit_child(WAIT, errno);
 	sim_print(philo, TAKE_FORK);
 	if (sem_wait(philo->input->forks))
 	{
 		sem_post(philo->input->forks);
-		return ;
+		error_exit_child(WAIT, errno);
 	}
 	sim_print(philo, TAKE_FORK);
 	philo->last_meal_time = get_time(false);
 	philo->meals_eaten++;
 	sim_print(philo, EAT);
-	if (philo->meals_eaten == philo->input->times_must_eat)
-	{
-		philo->sim_done = 1;
-		return ;
-	}
-	precise_sleep(philo->input->time_to_eat * 1e3);
-	sem_post(philo->input->forks);
-	sem_post(philo->input->forks);
+	if (philo->meals_eaten != philo->input->times_must_eat)
+		precise_sleep(philo->input->time_to_eat * 1e3);
+	if (sem_post(philo->input->forks))
+		error_exit_child(POST, errno);
+	if (sem_post(philo->input->forks))
+		error_exit_child(POST, errno);
 }
 
 static void	sim_sleep(t_philo *philo)
@@ -66,16 +73,26 @@ static void	sim_sleep(t_philo *philo)
 	precise_sleep(philo->input->time_to_sleep * 1e3);
 }
 
-static void	sim_think(t_philo *philo)
-{
-	// t_input		*input;
-	// long long	t_think;
+// static void	sim_think(t_philo *philo)
+// {
+// 	sim_print(philo, THINK);
+// }
 
-	sim_print(philo, THINK);
-	// input = philo->input;
-	// if (input->philos % 2 == 0)
-	// 	return ;
-	// t_think = (input->time_to_eat * 2) - input->time_to_sleep;
-	// if (t_think > 0)
-	// 	precise_sleep((t_think - 2) * 1e3);
+/*
+DESCRIPTION:
+	Prints simulation status to stdout.
+*/
+
+void	sim_print(t_philo *philo, const char *msg)
+{
+	long long	now;
+	long long	elapsed;
+
+	if (sem_wait(philo->input->print))
+		error_exit_child(WAIT, errno);
+	now = get_time(false);
+	elapsed = now - philo->input->sim_start;
+	printf("%lld %d %s\n", elapsed, philo->id, msg);
+	if (sem_post(philo->input->print))
+		error_exit_child(POST, errno);
 }
