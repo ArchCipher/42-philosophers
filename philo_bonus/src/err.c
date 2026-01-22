@@ -6,11 +6,11 @@
 /*   By: kmurugan <kmurugan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 19:44:12 by kmurugan          #+#    #+#             */
-/*   Updated: 2026/01/18 19:44:14 by kmurugan         ###   ########.fr       */
+/*   Updated: 2026/01/22 21:43:04 by kmurugan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 static const char	*ft_strerror(int errnum);
 
@@ -27,7 +27,8 @@ void	perr(const char *name, int errnum)
 
 static const char	*ft_strerror(int errnum)
 {
-	static const t_err	errs[] = {{ENOENT, "No such file or directory"},
+	static const t_err	errs[] = {{EPERM, "Operation not permitted"},
+	{ENOENT, "No such file or directory"}, {ESRCH, "No such process"},
 	{EINTR, "Interrupted function call"},
 	{EDEADLK, "Resource deadlock avoided"}, {ENOMEM, "Out of memory"},
 	{EACCES, "Permission denied"}, {EEXIST, "File exists"},

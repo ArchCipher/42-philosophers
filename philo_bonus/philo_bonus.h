@@ -1,7 +1,19 @@
-#ifndef PHILO_H
-# define PHILO_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_bonus.h                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmurugan <kmurugan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/22 16:07:27 by kmurugan          #+#    #+#             */
+/*   Updated: 2026/01/22 22:21:18 by kmurugan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-# include "ft_printf/ft_printf.h"
+#ifndef PHILO_BONUS_H
+# define PHILO_BONUS_H
+
+# include <fcntl.h>
 # include <errno.h>
 # include <limits.h>
 # include <pthread.h>
@@ -13,6 +25,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <sys/time.h>
+# include <sys/wait.h>
 # include <unistd.h>
 
 # define PROG "philo_bonus"
@@ -78,7 +91,7 @@ int				parse_input(char **av, t_input *input);
 
 int				init_sem(t_input *input);
 
-void			exec_child(t_input *input, int id);
+void			run_sim(t_philo *philo);
 void			*monitor_sim(void *arg);
 
 long long		get_time_safe(bool usec);

@@ -6,7 +6,7 @@
 /*   By: kmurugan <kmurugan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 19:44:25 by kmurugan          #+#    #+#             */
-/*   Updated: 2026/01/18 20:59:09 by kmurugan         ###   ########.fr       */
+/*   Updated: 2026/01/22 18:27:05 by kmurugan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,21 @@ int	main(int ac, char **av)
 	philos = malloc(sizeof(t_philo) * input.philos);
 	if (!philos)
 		return (perr("malloc", errno), 1);
-	if (init_philo(&input, philos))
-		return (free(philos), 1);
-	create_manage_threads(&input, philos);
-	destroy_mutexes(&input, philos, input.philos);
-	free(philos);
-	free(input.thread_ids);
-	free(input.forks);
+	if (init_philo(&input, philos) == 0)
+	{
+		create_manage_threads(&input, philos);
+		destroy_mutexes(&input, philos, input.philos);
+	}
+	cleanup(&input, philos);
 	return (0);
+}
+
+void	cleanup(t_input *input, t_philo *philos)
+{
+	if (philos)
+		free(philos);
+	if (input->thread_ids)
+		free(input->thread_ids);
+	if (input->forks)
+		free(input->forks);
 }

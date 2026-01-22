@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   philo_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmurugan <kmurugan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 19:44:25 by kmurugan          #+#    #+#             */
-/*   Updated: 2026/01/18 20:59:09 by kmurugan         ###   ########.fr       */
+/*   Updated: 2026/01/22 22:20:58 by kmurugan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 static int	fork_processes(t_input *input);
+static void	exec_child(t_input *input, int id);
 static int	wait_processes(t_input *input);
 static void	cleanup(t_input *input);
 /*
@@ -46,7 +47,7 @@ int	main(int ac, char **av)
 		return (printf("USAGE: ./%s %s %s\n", PROG, E_ARGS1, E_ARGS2));
 	if (parse_input(av, &input))
 		return (1);
-	if (av[5] && input.times_must_eat)
+	if (av[5] && !input.times_must_eat)
 		return (0);
 	if (init_sem(&input))
 		return (1);
@@ -89,6 +90,21 @@ static int	fork_processes(t_input *input)
 		i++;
 	}
 	return (0);
+}
+
+static void	exec_child(t_input *input, int id)
+{
+	t_philo	philo;
+
+	philo.id = id;
+	philo.meals_eaten = 0;
+	philo.last_meal_time = input->sim_start;
+	philo.input = input;
+	if (pthread_create(&philo.thread_id, NULL, monitor_sim, &philo))
+		error_exit_child(CREATE, errno);
+	pthread_detach(philo.thread_id);
+	run_sim(&philo);
+	exit (0);
 }
 
 /*

@@ -6,7 +6,7 @@
 /*   By: kmurugan <kmurugan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 19:44:20 by kmurugan          #+#    #+#             */
-/*   Updated: 2026/01/18 19:44:21 by kmurugan         ###   ########.fr       */
+/*   Updated: 2026/01/22 22:23:41 by kmurugan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,19 @@ DESCRIPTION:
 	Prints simulation status to stdout.
 */
 
-void	sim_print(t_philo *philo, const char *msg, bool is_death)
+void	sim_print(t_philo *philo, const char *msg1, const char *msg2,
+		bool is_death)
 {
 	if (mutex_op(&philo->input->global_state, MUTEX_LOCK, LOCK))
 		return ;
 	if (!philo->input->sim_done || is_death)
+	{
 		printf("%lld %d %s\n", get_time(false) - philo->input->sim_start,
-			philo->id, msg);
+			philo->id, msg1);
+		if (msg2)
+			printf("%lld %d %s\n", get_time(false) - philo->input->sim_start,
+				philo->id, msg2);
+	}
 	if (mutex_op(&philo->input->global_state, MUTEX_UNLOCK, UNLOCK))
 		return ;
 }
@@ -78,8 +84,6 @@ void	precise_sleep(long long usec)
 		return ;
 	while (get_time(true) - start < usec)
 	{
-		// if (should_stop_sim(input))
-		// 	break ;
 		rem = usec - (get_time(true) - start);
 		if (rem > 1e3)
 			usleep(rem / 2);

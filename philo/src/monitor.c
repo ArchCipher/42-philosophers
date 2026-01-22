@@ -6,7 +6,7 @@
 /*   By: kmurugan <kmurugan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 18:35:10 by kmurugan          #+#    #+#             */
-/*   Updated: 2026/01/18 20:18:07 by kmurugan         ###   ########.fr       */
+/*   Updated: 2026/01/22 22:24:22 by kmurugan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ void	*monitor_sim(void *arg)
 			if (philo_dead(philos + i))
 			{
 				stop_sim(philos->input);
-				sim_print(philos + i, DEATH, true);
+				sim_print(philos + i, DEATH, NULL, true);
 				return (NULL);
 			}
 			i++;
 		}
-		precise_sleep(2 * 1e3);
+		precise_sleep(1 * 1e3);
 	}
 	return (NULL);
 }
@@ -82,8 +82,6 @@ static int	philo_dead(t_philo *philo)
 	long long	last_meal;
 
 	must_eat = philo->input->times_must_eat;
-	if (philo->input->philos > 1 && must_eat < 0)
-		return (0);
 	meals_eaten = read_int(&philo->state, &philo->meals_eaten);
 	if (meals_eaten < 0 || (must_eat > 0 && meals_eaten >= must_eat))
 		return (0);

@@ -6,7 +6,7 @@
 /*   By: kmurugan <kmurugan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 19:44:12 by kmurugan          #+#    #+#             */
-/*   Updated: 2026/01/18 19:44:14 by kmurugan         ###   ########.fr       */
+/*   Updated: 2026/01/22 21:41:14 by kmurugan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,3 @@ static const char	*ft_strerror(int errnum)
 	}
 	return ("Unknown error");
 }
-

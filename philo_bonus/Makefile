@@ -1,17 +1,15 @@
 #				Library and Project names
 NAME			= philo_bonus
-LIB				= libftprintf.a
-LIBDIR			= ft_printf
 
 #				Includes
-HEADER			= philo.h
-INC				= -I. -I$(LIBDIR)
+HEADER			= philo_bonus.h
+INC				= -I.
 
 #				Sources & Objects
 MSRCS			= \
-				philo parser init \
-				child monitor \
-				philo_utils err
+				philo_bonus parser init \
+				routine monitor \
+				philo_bonus_utils err
 
 SRCS			= $(addprefix src/, $(addsuffix .c, $(MSRCS)))
 OBJS			= $(SRCS:.c=.o)
@@ -22,27 +20,21 @@ FLAGS			= -Wall -Werror -Wextra
 SFLAGS			= -fsanitize=address
 
 CFLAGS			= $(FLAGS) $(SFLAGS) -g
-LDFLAGS			= -L$(LIBDIR) -lftprintf
 
 %.o: %.c $(HEADER)
 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
-all: lib $(NAME)
-
-lib:
-	@make -C $(LIBDIR)
+all: $(NAME)
 
 $(NAME): $(OBJS) 
-	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o $@
+	$(CC) $(CFLAGS) $(OBJS) -o $@
 
 clean:
-	@make -C $(LIBDIR) clean
 	rm -f $(OBJS)
 
 fclean: clean
-	@make -C $(LIBDIR) fclean
 	rm -f $(NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re lib
+.PHONY: all clean fclean re

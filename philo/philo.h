@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmurugan <kmurugan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/22 16:04:07 by kmurugan          #+#    #+#             */
+/*   Updated: 2026/01/22 22:24:14 by kmurugan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 
@@ -34,10 +46,9 @@
 
 typedef struct s_err
 {
-	int			code;
-	const char	*msg;
-}				t_err;
-
+	int				code;
+	const char		*msg;
+}					t_err;
 
 typedef enum e_mutex_op
 {
@@ -57,6 +68,7 @@ typedef struct s_input
 	long long		sim_start;
 	int				sim_done;
 	pthread_t		*thread_ids;
+	int				threads_ready;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	global_state;
 }					t_input;
@@ -72,6 +84,7 @@ typedef struct s_philo
 	t_input			*input;
 }					t_philo;
 
+void				cleanup(t_input *input, t_philo *philos);
 int					parse_input(char **av, t_input *input);
 
 int					init_philo(t_input *input, t_philo *philos);
@@ -81,11 +94,13 @@ void				destroy_mutexes(t_input *input, t_philo *philos, int end);
 
 int					create_manage_threads(t_input *input, t_philo *philos);
 void				*run_sim(void *arg);
+void				run_routine(t_philo *philo);
 void				*monitor_sim(void *arg);
 void				stop_sim(t_input *input);
 
 long long			get_time(bool usec);
-void				sim_print(t_philo *philo, const char *msg, bool is_death);
+void				sim_print(t_philo *philo, const char *msg1,
+						const char *msg2, bool is_death);
 int					read_int(pthread_mutex_t *state, int *data);
 int					sim_done(t_input *input);
 void				precise_sleep(long long usec);

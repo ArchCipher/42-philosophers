@@ -6,7 +6,7 @@
 /*   By: kmurugan <kmurugan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 19:47:42 by kmurugan          #+#    #+#             */
-/*   Updated: 2026/01/18 20:57:30 by kmurugan         ###   ########.fr       */
+/*   Updated: 2026/01/22 18:46:20 by kmurugan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,11 @@ int	init_philo(t_input *input, t_philo *philos)
 	input->forks = malloc(sizeof(pthread_mutex_t) * input->philos);
 	if (!input->forks)
 		return (perr("malloc", errno), 1);
-	if (init_mutexes(input, philos))
-		return (free(input->forks), 1);
 	input->thread_ids = malloc(sizeof(pthread_t) * (input->philos + 1));
 	if (!input->thread_ids)
-		return (perr("malloc", errno), free(input->forks), 1);
-	input->sim_start = get_time(false);
-	if (input->sim_start < 0)
-		return (free(input->forks), free(input->thread_ids), 1);
+		return (perr("malloc", errno), 1);
+	if (init_mutexes(input, philos))
+		return (1);
 	init_threads(input, philos);
 	return (0);
 }
@@ -72,7 +69,7 @@ static void	init_threads(t_input *input, t_philo *philos)
 			philos[i].first_fork = input->forks + i;
 			philos[i].second_fork = input->forks + ((i + 1) % input->philos);
 		}
-		philos[i].last_meal_time = input->sim_start;
+		philos[i].last_meal_time = 0;
 		philos[i].meals_eaten = 0;
 		philos[i].input = input;
 		i++;

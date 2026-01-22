@@ -6,12 +6,11 @@
 /*   By: kmurugan <kmurugan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 18:35:10 by kmurugan          #+#    #+#             */
-/*   Updated: 2026/01/18 20:18:07 by kmurugan         ###   ########.fr       */
+/*   Updated: 2026/01/22 21:45:15 by kmurugan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
-
+#include "philo_bonus.h"
 
 static int			philo_dead(t_philo *philo);
 
