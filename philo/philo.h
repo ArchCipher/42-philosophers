@@ -16,6 +16,7 @@
 # include <errno.h>
 # include <limits.h>
 # include <pthread.h>
+# include <stdatomic.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -68,7 +69,7 @@ typedef struct s_input
 	long long		sim_start;
 	int				sim_done;
 	pthread_t		*thread_ids;
-	int				threads_ready;
+	_Atomic int		threads_ready;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	global_state;
 }					t_input;

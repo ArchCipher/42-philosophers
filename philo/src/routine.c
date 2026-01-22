@@ -21,6 +21,8 @@ void	run_routine(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
 		precise_sleep(5 * 1e3);
+	if (philo->id % 2 && philo->id == philo->input->philos)
+		precise_sleep((philo->input->time_to_eat + 10) * 1e3);
 	while (!sim_done(philo->input) && (philo->input->times_must_eat < 0
 			|| read_int(&philo->state,
 				&philo->meals_eaten) < philo->input->times_must_eat))
@@ -71,7 +73,7 @@ static void	sim_think(t_philo *philo)
 		return ;
 	t_think = (input->time_to_eat * 2) - input->time_to_sleep;
 	if (t_think > 0)
-		precise_sleep((t_think - 10) * 1e3);
+		precise_sleep(t_think * 1e3 * 0.35);
 }
 
 static void	update_meal_state(t_philo *philo)

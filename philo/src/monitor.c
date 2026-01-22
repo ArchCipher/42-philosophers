@@ -92,6 +92,7 @@ static int	philo_dead(t_philo *philo)
 	if (now - last_meal < philo->input->time_to_die)
 		return (0);
 	return (1);
+	// return (now - last_meal >= philo->input->time_to_die)
 }
 
 /*

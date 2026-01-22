@@ -33,14 +33,8 @@ int	create_manage_threads(t_input *input, t_philo *philos)
 			return (1);
 		i++;
 	}
-	if (mutex_op(&input->global_state, MUTEX_LOCK, LOCK))
-	{
-		join_threads(input->philos, input->thread_ids);
-		return (1);
-	}
 	init_last_meal_time(input, philos);
 	input->threads_ready = 1;
-	mutex_op(&input->global_state, MUTEX_UNLOCK, UNLOCK);
 	if (pthread_create(&input->thread_ids[input->philos], NULL, monitor_sim,
 			philos))
 		return (perr(CREATE, errno), 1);
@@ -97,8 +91,7 @@ void	*run_sim(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	while (!read_int(&philo->input->global_state,
-			&philo->input->threads_ready))
+	while (!philo->input->threads_ready)
 	{
 		if (read_int(&philo->input->global_state,
 				&philo->input->sim_done))
