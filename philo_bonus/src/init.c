@@ -20,10 +20,13 @@ int	init_sem(t_input *input)
 {
 	sem_unlink("/forks");
 	sem_unlink("/print");
+	sem_unlink("/start");
 	if (open_sem("/forks", &input->forks, input->philos))
 		return (1);
 	if (open_sem("/print", &input->print, 1))
 		return (sem_close(input->forks), 1);
+	if (open_sem("/start", &input->start, 0))
+		return (sem_close(input->forks), sem_close(input->print), 1);
 	return (0);
 }
 

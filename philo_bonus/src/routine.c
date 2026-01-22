@@ -19,6 +19,10 @@ static void	sim_print(t_philo *philo, const char *msg1, const char *msg2);
 
 void	run_sim(t_philo *philo)
 {
+	if (philo->id % 2 == 0)
+		precise_sleep(5 * 1e3);
+	if (philo->id % 2 && philo->id == philo->input->philos)
+		precise_sleep((philo->input->time_to_eat + 10) * 1e3);
 	while (1)
 	{
 		sim_eat(philo);
@@ -58,14 +62,8 @@ static void	sim_sleep(t_philo *philo)
 
 static void	sim_think(t_philo *philo)
 {
-	long long	t_think;
-
 	sim_print(philo, THINK, NULL);
-	if (philo->input->philos % 2 == 0)
-		return ;
-	t_think = (philo->input->time_to_eat * 2) - philo->input->time_to_sleep;
-	if (t_think > 0)
-		precise_sleep((t_think - 10) * 1e3);
+	precise_sleep(1 * 1e3);
 }
 
 /*
@@ -84,7 +82,7 @@ void	sim_print(t_philo *philo, const char *msg1, const char *msg2)
 	elapsed = now - philo->input->sim_start;
 	printf("%lld %d %s\n", elapsed, philo->id, msg1);
 	if (msg2)
-		printf("%lld %d %s\n", elapsed, philo->id, msg1);
+		printf("%lld %d %s\n", elapsed, philo->id, msg2);
 	if (sem_post(philo->input->print))
 		error_exit_child(POST, errno);
 }

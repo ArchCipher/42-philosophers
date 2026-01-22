@@ -75,6 +75,7 @@ typedef struct s_input
 	long long	sim_start;
 	sem_t		*forks;
 	sem_t		*print;
+	sem_t		*start;
 	pid_t		*pids;
 }				t_input;
 

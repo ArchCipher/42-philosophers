@@ -73,20 +73,21 @@ static int	fork_processes(t_input *input)
 	while (i < input->philos)
 	{
 		input->pids[i] = fork();
-		if (i == 0)
-		{
-			input->sim_start = get_time_safe(false);
-			if (input->sim_start < 0)
-			{
-				kill(input->pids[0], SIGTERM);
-				waitpid(input->pids[0], NULL, 0);
-				return (-1);
-			}
-		}
 		if (input->pids[i] == -1)
 			return (perr("fork", errno), 1);
 		if (input->pids[i] == 0)
 			exec_child(input, i + 1);
+		i++;
+	}
+	i = 0;
+	while (i < input->philos)
+	{
+		if (sem_post(input->start))
+		{
+			perr("sem_post", errno);
+			kill(input->pids[0], SIGTERM);
+			return (1);
+		}
 		i++;
 	}
 	return (0);
@@ -98,8 +99,11 @@ static void	exec_child(t_input *input, int id)
 
 	philo.id = id;
 	philo.meals_eaten = 0;
-	philo.last_meal_time = input->sim_start;
 	philo.input = input;
+	if (sem_wait(input->start))
+		error_exit_child(WAIT, errno);
+	input->sim_start = get_time(false);
+	philo.last_meal_time = input->sim_start;
 	if (pthread_create(&philo.thread_id, NULL, monitor_sim, &philo))
 		error_exit_child(CREATE, errno);
 	pthread_detach(philo.thread_id);
@@ -148,4 +152,5 @@ static void	cleanup(t_input *input)
 		free(input->pids);
 	sem_close(input->forks);
 	sem_close(input->print);
+	sem_close(input->start);
 }
