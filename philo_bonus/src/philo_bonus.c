@@ -115,8 +115,8 @@ static void	exec_child(t_input *input, int id)
 DESCRIPTION:
 	Wait for processes to finish and clean up.
 	In case of SIGINT(ctrl+c), it may leave orphaned processes and semaphores.
-	The subject does not allow signal or sigaction, so there is no way to handle this
-	without a signal handler.
+	The subject does not allow signal or sigaction, and there is no way to
+	handle this without a signal handler.
 */
 
 static int	wait_processes(t_input *input)
@@ -129,11 +129,14 @@ static int	wait_processes(t_input *input)
 	if (child == -1)
 		return (perr("waitpid", errno), 1);
 	i = 0;
-	while (i < input->philos)
+	if (child != 0)
 	{
-		if (input->pids[i] != -1 && child != input->pids[i])
-			kill(input->pids[i], SIGTERM);
-		i++;
+		while (i < input->philos)
+		{
+			if (input->pids[i] != -1 && child != input->pids[i])
+				kill(input->pids[i], SIGTERM);
+			i++;
+		}
 	}
 	while (waitpid(-1, NULL, 0) > 0)
 		;
