@@ -154,28 +154,22 @@ The project has been tested with:
 
 ## Key Challenges & Solutions
 
-### Challenge 1: Deadlock Prevention
-**Problem:** All philosophers picking up left fork simultaneously causes deadlock  
-**Solution:** Implement odd/even strategy to break circular wait
+### 1: Deadlock Prevention
+**All philosophers picking up left fork simultaneously causes deadlock**
 
-### Challenge 2: Race Conditions
-**Problem:** Multiple threads accessing shared data simultaneously  
-**Solution:** Use mutexes to protect shared resources (forks, state, printing)
+I implemented odd/even strategy to break circular wait
 
-### Challenge 3: Precise Timing
-**Problem:** Ensuring accurate timing for eating, sleeping, death detection  
-**Solution:** Use `gettimeofday()` for timestamps, careful `usleep()` usage
+### 2: Race Conditions
+**Multiple threads accessing shared data simultaneously**
+I use mutexes to protect shared resources (forks, state, printing). In bonus part I used semaphores to achieve the same.
 
-### Challenge 4: Thread-Safe Printing
+### 3: Precise Timing
+**Ensuring accurate timing for eating, sleeping, death detection**
+I used `gettimeofday()` for timestamps, and careful `usleep()` usage with while loop
+
+### 4: Thread-Safe Printing
 **Problem:** Multiple threads printing simultaneously causes garbled output  
 **Solution:** Use mutex-protected printing function
-
----
-
-## Project Status
-
-**Mandatory Completed** - Thread-based implementation with mutexes  
-**Bonus In Progress** - Process-based implementation with semaphores
 
 ---
 
